@@ -25,6 +25,9 @@ public enum ResultCode {
     ASSIGN_ERROR(2023,"分配失败"),
     CANCEL_ERROR(2024,"取消失败"),
 
+    UPLOAD_ERROR(2040,"上传失败"),
+    UPLOAD_IS_NULL(2041,"上传失败, 请选择文件"),
+
     TOKEN_IS_EXIST(3000, "请先登录"),
     TOKEN_IS_EXISTED(3000, "您的账号已在其他设备上登录"),
     TOKEN_ERROR(3000, "登录失效，请重新登录"),

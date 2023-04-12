@@ -24,6 +24,11 @@ public class SysUser {
     @ExcelProperty("ID")
     private Long userId;
 
+    @ApiModelProperty(value = "用户头像")
+    @Column(name = "avatar")
+    @ExcelProperty("用户头像")
+    private String avatar;
+
     @ApiModelProperty(value = "用户名称")
     @Column(name = "username")
     @ExcelProperty("用户名称")

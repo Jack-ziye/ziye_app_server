@@ -246,7 +246,6 @@ public class LoginController {
      */
     @ApiOperation(value = "查询列表-登录日志")
     @PostMapping("/loginLog")
-
     public Result pageList(HttpServletResponse response, @RequestBody Map<String, String> map) {
         response.setCharacterEncoding("utf-8");
         int pageNum = 1;//默认从第一页查询

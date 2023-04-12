@@ -12,6 +12,9 @@ public class UserParam {
     @ApiModelProperty(value = "id")
     private Long userId;
 
+    @ApiModelProperty(value = "头像")
+    private String avatar;
+
     @ApiModelProperty(value = "用户名")
     @NotBlank(message = "请填写用户名")
     private String username;

@@ -48,7 +48,7 @@ public class LoginInterceptor implements HandlerInterceptor {
             return false;
         }
 
-        String refreshToken = request.getHeader("Refresh_token");
+        String refreshToken = request.getHeader("Refresh-token");
         if (!StringUtils.isBlank(refreshToken)) {
             if (JwtToken.getTokenExpired(refreshToken) == 0) {
                 Result result = Result.error(ResultCode.TOKEN_ERROR);

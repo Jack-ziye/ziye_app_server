@@ -29,6 +29,10 @@ public class Project {
     @Column(name = "category_id")
     private Long categoryId;
 
+    @ApiModelProperty(value = "封面地址")
+    @Column(name = "cover")
+    private String cover;
+
     @ApiModelProperty(value = "项目名称")
     @Column(name = "`name`")
     private String projectName;

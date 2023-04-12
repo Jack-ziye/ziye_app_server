@@ -11,7 +11,7 @@
  Target Server Version : 50726
  File Encoding         : 65001
 
- Date: 20/03/2023 12:37:25
+ Date: 12/04/2023 17:32:20
 */
 
 SET NAMES utf8mb4;
@@ -39,7 +39,7 @@ CREATE TABLE `pf_apply`  (
 -- ----------------------------
 INSERT INTO `pf_apply` VALUES (1, 1, 1, NULL, 0, 0, 0, '2023-03-15 19:09:47', NULL);
 INSERT INTO `pf_apply` VALUES (2, 1, 2, '', 0, 0, 1, '2023-03-15 19:09:51', '2023-03-20 00:05:57');
-INSERT INTO `pf_apply` VALUES (3, 2, 2, NULL, 0, 0, 0, '2023-03-15 19:09:53', '2023-03-07 00:18:52');
+INSERT INTO `pf_apply` VALUES (3, 2, 2, NULL, 0, 0, 0, '2023-03-15 19:01:53', '2023-03-07 00:18:52');
 
 -- ----------------------------
 -- Table structure for pf_category
@@ -56,13 +56,14 @@ CREATE TABLE `pf_category`  (
   `modifier` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '最后修改人',
   `lmt` datetime(0) NULL DEFAULT NULL COMMENT '最后更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 6 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = MyISAM AUTO_INCREMENT = 8 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of pf_category
 -- ----------------------------
 INSERT INTO `pf_category` VALUES (1, '考试报名', NULL, 0, 1, 1, '2023-03-05 12:55:19', '1', '2023-03-15 17:33:26');
 INSERT INTO `pf_category` VALUES (3, '活动报名', NULL, 0, 2, 1, '2023-03-09 20:20:47', '1', '2023-03-09 20:20:47');
+INSERT INTO `pf_category` VALUES (6, '测试栏目', NULL, 0, 1, 1, '2023-03-23 11:28:48', '1', '2023-03-23 11:28:48');
 
 -- ----------------------------
 -- Table structure for pf_news
@@ -93,28 +94,36 @@ INSERT INTO `pf_news` VALUES (1, '测试', '<p>测试数据</p>', 1, 0, 0, 1, '2
 DROP TABLE IF EXISTS `pf_project`;
 CREATE TABLE `pf_project`  (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '项目ID',
-  `category_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '-1' COMMENT '类别ID',
+  `category_id` bigint(20) NOT NULL DEFAULT 1 COMMENT '类别ID',
+  `cover` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '封面url',
   `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '名称',
   `content` varchar(2000) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '内容',
-  `start_time` datetime(0) NULL DEFAULT NULL COMMENT '开始时间',
-  `end_time` datetime(0) NULL DEFAULT NULL COMMENT '结束时间',
+  `start_time` datetime(0) NOT NULL COMMENT '开始时间',
+  `end_time` datetime(0) NOT NULL COMMENT '结束时间',
   `quota` bigint(20) NULL DEFAULT -1 COMMENT '名额（-1无限制）',
   `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
   `status` int(2) NULL DEFAULT 0 COMMENT '状态',
   `is_top` int(2) NULL DEFAULT 0 COMMENT '是否置顶',
   `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建用户ID',
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `modifier` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '最后修改人',
+  `modifier` bigint(255) NULL DEFAULT NULL COMMENT '最后修改人',
   `lmt` datetime(0) NULL DEFAULT NULL COMMENT '最后更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 10 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = MyISAM AUTO_INCREMENT = 11 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of pf_project
 -- ----------------------------
-INSERT INTO `pf_project` VALUES (1, '1', '测试', '测试内容', '2023-03-24 18:57:47', '2023-04-01 18:57:53', 99, NULL, 0, 0, 1, '2023-03-05 13:09:03', '1', '2023-03-05 13:09:03');
-INSERT INTO `pf_project` VALUES (2, '1', '程序员考试说明', '<h1 style=\"text-align: center;\"><span style=\"font-size: 24pt; color: rgb(224, 62, 45);\">程序员考试说明</span></h1>\n<hr>\n<p>1．考试要求：</p>\n<p>（1）掌握数制及其转换、数据的机内表示、算术和逻辑运算，以及相关的应用数学基础知识；</p>\n<p>（2）理解计算机的组成以及各主要部件的性能指标；</p>\n<p>（3）掌握操作系统、程序设计语言的基础知识；</p>\n<p>（4）熟练掌握计算机常用办公软件的基本操作方法；</p>\n<p>（5）熟练掌握基本数据结构和常用算法；</p>\n<p>（6）熟练掌握C程序设计语言，以及C++、Java、Visual Basic中一种程序设计语言；</p>\n<p>（7）熟悉数据库、网络和多媒体的基础知识；</p>\n<p>（8）掌握软件工程的基础知识，了解软件过程基本知识、软件开发项目管理的常识；</p>\n<p>（9）了解常用信息技术标准、安全性，以及有关法律、法规的基本知识；</p>\n<p>（10）了解信息化、计算机应用的基础知识；</p>\n<p>（11）正确阅读和理解计算机领域的简单英文资料。</p>\n<p>2．通过本考试的合格人员能根据软件开发项目管理和软件工程的要求，按照程序设计规格说明书编制并调试程序，写出程序的相应文档，产生符合标准规范的、实现设计要求的、能正确可靠运行的程序；具有助理工程师（或技术员）的实际工作能力和业务水平。</p>\n<p>3．本考试设置的科目包括：</p>\n<p>（1）计算机硬软件基础知识，考试时间为150分钟，笔试，选择题；</p>\n<p>（2）程序设计，考试时间为150分钟，笔试，问答题。</p>', '2023-02-15 18:57:53', '2023-03-15 18:57:53', -1, '修改测试数据', 0, 0, 1, '2023-03-05 13:09:09', '1', '2023-03-18 23:05:40');
-INSERT INTO `pf_project` VALUES (3, '1', '测试333', '<p>测试内容333dsada</p>', '2023-02-15 18:57:53', '2023-03-31 18:57:53', -1, '', 0, 0, 1, '2023-03-24 13:09:09', '1', '2023-03-13 21:14:55');
+INSERT INTO `pf_project` VALUES (1, 1, '/upload/85d7615ff6e34b32ad8086804a815857.png', '测试数据', '测试内容', '2023-04-12 00:00:00', '2023-04-12 00:00:00', -1, 'foiLSlpODEwEpnydBPvDydGXNLPlbVlWaVvLudWomGLtXZiEbs', 297948443, 1, 1, '2023-04-12 00:00:00', 1, '2023-04-12 00:00:00');
+INSERT INTO `pf_project` VALUES (2, 1, '/upload/85d7615ff6e34b32ad8086804a815857.png', '测试数据', '测试内容', '2023-04-12 00:00:00', '2023-04-12 00:00:00', -1, 'zfGHnumKcRtbSQAeYOoWgDuLWYoiPYGYrGoYYAYbNVfIFNPQhD', 505856833, 1, 1, '2023-04-12 00:00:00', 1, '2023-04-12 00:00:00');
+INSERT INTO `pf_project` VALUES (3, 1, '/upload/85d7615ff6e34b32ad8086804a815857.png', '测试数据', '测试内容', '2023-04-12 00:00:00', '2023-04-12 00:00:00', -1, 'KKESfEAyICWgMzBbiTgjjjyRKtiBsHeXylgcSbvhUOqjyvOjBQ', 405116567, 1, 1, '2023-04-12 00:00:00', 1, '2023-04-12 00:00:00');
+INSERT INTO `pf_project` VALUES (4, 1, '/upload/85d7615ff6e34b32ad8086804a815857.png', '测试数据', '测试内容', '2023-04-12 00:00:00', '2023-04-12 00:00:00', -1, 'HQpWQePAGpwFQfOQyNmxitYBpteHpMKsCwBOZDJYIgDZoSNiOG', 1747237709, 1, 1, '2023-04-12 00:00:00', 1, '2023-04-12 00:00:00');
+INSERT INTO `pf_project` VALUES (5, 1, '/upload/85d7615ff6e34b32ad8086804a815857.png', '测试数据', '测试内容', '2023-04-12 00:00:00', '2023-04-12 00:00:00', -1, 'FMwVkrjNugkFWUGpKQHbLOHIDqlPrtaOLfRNkthlAOGbxaNOgW', 670457468, 1, 1, '2023-04-12 00:00:00', 1, '2023-04-12 00:00:00');
+INSERT INTO `pf_project` VALUES (6, 1, '/upload/85d7615ff6e34b32ad8086804a815857.png', '测试数据', '测试内容', '2023-04-12 00:00:00', '2023-04-12 00:00:00', -1, 'PPGKcOYpbcLxNVQbBLkcyBTGqwSpxFNbqfhfmupIUVZaHwVtpX', 184546751, 1, 1, '2023-04-12 00:00:00', 1, '2023-04-12 00:00:00');
+INSERT INTO `pf_project` VALUES (7, 1, '/upload/85d7615ff6e34b32ad8086804a815857.png', '测试数据', '测试内容', '2023-04-12 00:00:00', '2023-04-12 00:00:00', -1, 'UEnvjeASZOXKNSfcNgmrPzfPDeeJTStmQDYCReFpXFDYZqqISO', 1821291858, 1, 1, '2023-04-12 00:00:00', 1, '2023-04-12 00:00:00');
+INSERT INTO `pf_project` VALUES (8, 1, '/upload/85d7615ff6e34b32ad8086804a815857.png', '测试数据', '测试内容', '2023-04-12 00:00:00', '2023-04-12 00:00:00', -1, 'FwLpXUDOIHJNOumYJhmuzhEmNjfmvcMazTFTmFJXrVHFvPBflJ', 193918403, 1, 1, '2023-04-12 00:00:00', 1, '2023-04-12 00:00:00');
+INSERT INTO `pf_project` VALUES (9, 1, '/upload/85d7615ff6e34b32ad8086804a815857.png', '测试数据', '<p>测试内容</p>', '2023-04-12 00:00:00', '2023-04-12 00:00:00', -1, 'AfOIagOltFfkQiLKdxJmzupVuygXfgFyDbdUVrGlEPztXVtrxP', 1025763587, 1, 1, '2023-04-12 00:00:00', 1, '2023-04-12 16:19:58');
+INSERT INTO `pf_project` VALUES (10, 1, '/upload/85d7615ff6e34b32ad8086804a815857.png', '测试数据', '测试内容', '2023-04-12 00:00:00', '2023-04-12 00:00:00', -1, 'OTinYsUREbtcMeYqClYazuuQfyvAuLDcqBQzCGTwAtBYHbZqFJ', 1506381370, 1, 1, '2023-04-12 00:00:00', 1, '2023-04-12 00:00:00');
 
 -- ----------------------------
 -- Table structure for pf_talent
@@ -149,7 +158,7 @@ CREATE TABLE `role_menu`  (
   `role_id` bigint(20) NOT NULL COMMENT '角色ID',
   `menu_id` bigint(20) NOT NULL COMMENT '菜单ID',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 85 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 86 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of role_menu
@@ -203,23 +212,26 @@ INSERT INTO `role_menu` VALUES (81, 1, 51);
 INSERT INTO `role_menu` VALUES (82, 1, 52);
 INSERT INTO `role_menu` VALUES (83, 1, 53);
 INSERT INTO `role_menu` VALUES (84, 1, 54);
+INSERT INTO `role_menu` VALUES (85, 1, 55);
 
 -- ----------------------------
 -- Table structure for role_user
 -- ----------------------------
 DROP TABLE IF EXISTS `role_user`;
 CREATE TABLE `role_user`  (
-  `id` bigint(20) NOT NULL,
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `role_id` bigint(20) NULL DEFAULT NULL COMMENT '角色ID',
   `user_id` bigint(20) NULL DEFAULT NULL COMMENT '用户ID',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 17 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of role_user
 -- ----------------------------
 INSERT INTO `role_user` VALUES (1, 1, 1);
 INSERT INTO `role_user` VALUES (2, 2, 2);
+INSERT INTO `role_user` VALUES (15, 2, 6);
+INSERT INTO `role_user` VALUES (16, 2, 5);
 
 -- ----------------------------
 -- Table structure for sys_config
@@ -293,20 +305,20 @@ CREATE TABLE `sys_menu`  (
   `lmt` datetime(0) NULL DEFAULT NULL COMMENT '最后更新时间',
   `modifier` bigint(2) NULL DEFAULT NULL COMMENT '最后修改人',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 55 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 56 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_menu
 -- ----------------------------
-INSERT INTO `sys_menu` VALUES (1, 0, 0, '系统管理', 'SettingOutlined', '/system', NULL, 1, 0, 0, 1, '2022-11-01 17:16:59', '2022-11-01 17:17:01', 1);
-INSERT INTO `sys_menu` VALUES (2, 0, 0, '系统监控', 'FundProjectionScreenOutlined', '/monitor', NULL, 2, 0, 0, 1, '2022-11-01 19:20:43', '2022-11-01 17:17:01', 1);
+INSERT INTO `sys_menu` VALUES (1, 0, 0, '系统管理', 'SettingOutlined', '/system', NULL, 1, 0, 0, 1, '2022-11-01 17:16:59', '2023-03-23 16:57:15', 1);
+INSERT INTO `sys_menu` VALUES (2, 0, 0, '系统监控', 'FundProjectionScreenOutlined', '/monitor', NULL, 2, 0, 0, 1, '2022-11-01 19:20:43', '2023-03-23 16:57:17', 1);
 INSERT INTO `sys_menu` VALUES (10, 1, 1, '用户管理', 'UserOutlined', '/system/user', 'system:user:list', 1, 0, 0, 1, '2022-11-01 17:17:44', '2022-11-01 17:17:46', 1);
 INSERT INTO `sys_menu` VALUES (11, 1, 1, '角色管理', 'TeamOutlined', '/system/role', 'system:role:list', 2, 0, 0, 1, '2022-11-01 18:08:05', '2022-11-01 17:17:01', 1);
 INSERT INTO `sys_menu` VALUES (12, 1, 1, '菜单管理', 'ApartmentOutlined', '/system/menu', 'system:menu:list', 3, 0, 0, 1, '2022-11-01 18:08:58', '2022-11-01 17:17:01', 1);
 INSERT INTO `sys_menu` VALUES (13, 1, 1, '字典管理', 'ReadOutlined', '/system/dict', 'system:dict:list', 4, 0, 0, 1, '2022-11-01 19:19:11', '2022-11-01 17:17:01', 1);
 INSERT INTO `sys_menu` VALUES (14, 1, 1, '参数设置', 'FormOutlined', '/system/config', 'system:config:list', 5, 1, 1, 1, '2022-11-01 19:19:37', '2022-11-01 17:17:01', 1);
 INSERT INTO `sys_menu` VALUES (15, 1, 1, '登录日志', 'ProfileOutlined', '/system/log-info', 'system:loginLog:list', 6, 0, 0, 1, '2022-11-01 19:20:22', '2022-11-01 17:17:01', 1);
-INSERT INTO `sys_menu` VALUES (16, 2, 1, '在线用户', 'WifiOutlined', '/monitor/online', 'monitor:online:list', 1, 0, 0, 1, '2022-11-01 19:21:05', '2022-11-01 17:17:01', 1);
+INSERT INTO `sys_menu` VALUES (16, 2, 1, '在线用户', 'WifiOutlined', '/monitor/online', 'monitor:online:list', 1, 1, 0, 1, '2022-11-01 19:21:05', '2022-11-01 17:17:01', 1);
 INSERT INTO `sys_menu` VALUES (17, 2, 1, '服务监控', 'FundOutlined', '/monitor/server', 'monitor:server:list', 2, 0, 0, 1, '2022-11-01 19:21:33', '2022-11-01 17:17:01', 1);
 INSERT INTO `sys_menu` VALUES (18, 2, 1, '缓存监控', 'SlidersOutlined', '/monitor/cache', 'monitor:cache:list', 3, 0, 0, 1, '2022-11-01 19:21:58', '2022-11-01 17:17:01', 1);
 INSERT INTO `sys_menu` VALUES (19, 3, 1, '人才库', 'ApiOutlined', '/enroll/user', 'enroll:user:list', 1, 0, 0, 1, '2022-12-07 19:53:16', '2022-12-09 21:40:37', 1);
@@ -341,6 +353,7 @@ INSERT INTO `sys_menu` VALUES (50, 47, 1, '人才管理', 'AimOutlined', '/pf/ta
 INSERT INTO `sys_menu` VALUES (51, 47, 1, '项目管理', 'AimOutlined', '/pf/project', 'pf:project:list', 4, 0, 0, 1, '2023-03-09 19:24:55', '2023-03-09 19:25:08', 1);
 INSERT INTO `sys_menu` VALUES (53, 51, 1, '添加项目', 'AimOutlined', '/pf/project/add', 'pf:project:add', 1, 0, 1, 1, '2023-03-10 23:39:19', '2023-03-11 00:11:07', 1);
 INSERT INTO `sys_menu` VALUES (54, 47, 1, '申请管理', 'AimOutlined', '/pf/apply', 'pf:apply:list', 5, 0, 0, 1, '2023-03-15 19:05:44', NULL, NULL);
+INSERT INTO `sys_menu` VALUES (55, 11, 1, '分配用户', 'AimOutlined', '/system/role/assgin/user', 'system:role:assgin:user:list', 6, 0, 1, 1, '2023-03-21 14:31:03', NULL, NULL);
 
 -- ----------------------------
 -- Table structure for sys_role
@@ -365,7 +378,7 @@ CREATE TABLE `sys_role`  (
 -- Records of sys_role
 -- ----------------------------
 INSERT INTO `sys_role` VALUES (1, '超级管理员', 'admin', 1, 0, NULL, 1, '2022-11-01 01:07:59', '2022-12-09 21:18:59');
-INSERT INTO `sys_role` VALUES (2, '普通用户', 'user', 2, 0, NULL, 1, '2022-11-01 11:31:22', '2022-12-09 19:23:28');
+INSERT INTO `sys_role` VALUES (2, '普通用户', 'user', 2, 0, NULL, 1, '2022-11-01 11:31:22', '2023-03-23 17:26:53');
 
 -- ----------------------------
 -- Table structure for sys_user
@@ -373,6 +386,7 @@ INSERT INTO `sys_role` VALUES (2, '普通用户', 'user', 2, 0, NULL, 1, '2022-1
 DROP TABLE IF EXISTS `sys_user`;
 CREATE TABLE `sys_user`  (
   `id` bigint(20) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT,
+  `avatar` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '头像',
   `username` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '姓名',
   `password` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '密码',
   `nickname` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '用户昵称',
@@ -386,13 +400,17 @@ CREATE TABLE `sys_user`  (
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `uq_user_username`(`username`) USING BTREE,
   UNIQUE INDEX `uq_user_mobile`(`mobile`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = 'SSO用户' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = 'SSO用户' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES (00000000000000000001, 'ziye', '1d15950ac5287d10472790c1d6101c89', 'ziye', '15013861386', '2296543112@qq.com', 0, '2022-10-31 21:35:13', NULL, '2022-12-14 22:33:03', 1);
-INSERT INTO `sys_user` VALUES (00000000000000000002, 'admin', 'b5b728f311b568000ffd2aac7a78bc25', '管理员', '15091919602', '2296543112@qq.com', 0, '2022-11-03 20:52:31', NULL, '2022-12-15 18:18:44', 1);
+INSERT INTO `sys_user` VALUES (00000000000000000001, '/upload/6c196d4c3768490ca85d5c57455f1764.png', 'ziye', '1d15950ac5287d10472790c1d6101c89', 'ziye', '15013861386', '2296543112@qq.com', 0, '2022-10-31 21:35:13', NULL, '2023-04-12 17:16:27', 1);
+INSERT INTO `sys_user` VALUES (00000000000000000002, '/upload/6c196d4c3768490ca85d5c57455f1764.png', 'admin', 'b5b728f311b568000ffd2aac7a78bc25', '管理员', '15091919602', '2296543112@qq.com', 0, '2022-11-03 20:52:31', NULL, '2022-12-15 18:18:44', 1);
+INSERT INTO `sys_user` VALUES (00000000000000000003, '/upload/6c196d4c3768490ca85d5c57455f1764.png', 'test', '336a8c706f54a9e7fc1e61920353bca6', '测试', '15099999999', NULL, 0, '2023-03-21 11:50:10', 1, '2023-03-21 11:50:10', 1);
+INSERT INTO `sys_user` VALUES (00000000000000000004, '/upload/6c196d4c3768490ca85d5c57455f1764.png', 'liuyj', '95d3403105f902904ccf03bb8e5cdb58', 'liuyj', '15092222222', NULL, 0, '2023-03-21 11:52:19', 1, '2023-03-23 16:53:55', 1);
+INSERT INTO `sys_user` VALUES (00000000000000000005, '/upload/6c196d4c3768490ca85d5c57455f1764.png', 'zhong', '4fd6e788ca14e6b34f237eff1f435b17', 'zhong', '15099999997', NULL, 0, '2023-03-21 11:58:14', 1, '2023-03-23 16:53:53', 1);
+INSERT INTO `sys_user` VALUES (00000000000000000006, '/upload/6c196d4c3768490ca85d5c57455f1764.png', 'zhang', '05f12742ae69c85e88dc1be5c9150699', 'zhang', '13622222454', NULL, 0, '2023-03-21 19:08:14', 1, '2023-03-23 17:30:32', 1);
 
 -- ----------------------------
 -- Table structure for user_login
@@ -409,7 +427,7 @@ CREATE TABLE `user_login`  (
   `status` int(2) NULL DEFAULT NULL COMMENT '登录状态',
   `login_time` datetime(0) NOT NULL COMMENT '登录时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 292 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 340 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of user_login
@@ -520,5 +538,53 @@ INSERT INTO `user_login` VALUES (288, 1, 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJleHAiOj
 INSERT INTO `user_login` VALUES (289, 1, 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2NzkyMTYzOTgsInVzZXJJZCI6MSwiaWF0IjoxNjc5MjA5MTk4fQ.k2U4DE7QBcP731zcOpIase1VF0uiTmEIsEYmmB8NPxM', '0:0:0:0:0:0:0:1', NULL, 'CHROME11', 'Windows 10', 1, '2023-03-19 14:59:58');
 INSERT INTO `user_login` VALUES (290, 1, 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2NzkyMzU0NzUsInVzZXJJZCI6MSwiaWF0IjoxNjc5MjI4Mjc1fQ.vase-CHxoskKUbVxO2tA4VU8HDuKVR2s_JZ0fZkjLy0', '0:0:0:0:0:0:0:1', NULL, 'CHROME11', 'Windows 10', 1, '2023-03-19 20:17:56');
 INSERT INTO `user_login` VALUES (291, 1, 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2NzkyNDYwMzQsInVzZXJJZCI6MSwiaWF0IjoxNjc5MjM4ODM0fQ.u55M9VerEQOfXzy-HcclzBeTfynukZJ46m_EEf09a5c', '0:0:0:0:0:0:0:1', NULL, 'CHROME11', 'Windows 10', 1, '2023-03-19 23:13:54');
+INSERT INTO `user_login` VALUES (292, 1, 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2NzkzNzEzMTgsInVzZXJJZCI6MSwiaWF0IjoxNjc5MzY0MTE4fQ.Zm_JfjV-yhL4rrZN5O-co17NYkt_3H2jBGguERTnzUs', '0:0:0:0:0:0:0:1', NULL, 'CHROME11', 'Windows 10', 0, '2023-03-21 10:01:59');
+INSERT INTO `user_login` VALUES (293, 1, 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2NzkzODU1NjEsInVzZXJJZCI6MSwiaWF0IjoxNjc5Mzc4MzYxfQ.CqaI3kjN4GIcQ_tTrpWjVBOEQRziAi6Tu-5MXJqVY0s', '0:0:0:0:0:0:0:1', NULL, 'CHROME11', 'Windows 10', 0, '2023-03-21 13:59:22');
+INSERT INTO `user_login` VALUES (294, 1, 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2NzkzOTI5OTcsInVzZXJJZCI6MSwiaWF0IjoxNjc5Mzg1Nzk3fQ.9C2HAMT1YZUNhKqsuoT6o4biAGbEXW7CsOdpeLEzCzw', '0:0:0:0:0:0:0:1', NULL, 'CHROME11', 'Windows 10', 1, '2023-03-21 16:03:18');
+INSERT INTO `user_login` VALUES (295, 1, 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2Nzk0MDI3NjMsInVzZXJJZCI6MSwiaWF0IjoxNjc5Mzk1NTYzfQ.7eZEJUclLvRZmVYMJmrbpV9tc26PUMAoYEXTHZfetjs', '0:0:0:0:0:0:0:1', NULL, 'CHROME11', 'Windows 10', 1, '2023-03-21 18:46:03');
+INSERT INTO `user_login` VALUES (296, 1, 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2Nzk0MDk5NjIsInVzZXJJZCI6MSwiaWF0IjoxNjc5NDAyNzYyfQ.cpWnQu0qKIafyUmMGoyCbWnVmJNJHMgYAXAcNOM6thI', '0:0:0:0:0:0:0:1', NULL, 'CHROME11', 'Windows 10', 1, '2023-03-21 20:46:02');
+INSERT INTO `user_login` VALUES (297, 1, 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2Nzk0MTcxODcsInVzZXJJZCI6MSwiaWF0IjoxNjc5NDA5OTg3fQ.wvfP4WhG9__L9nKuPPLme-gMH2yEDF60jypc52x2Lc4', '0:0:0:0:0:0:0:1', NULL, 'CHROME11', 'Windows 10', 1, '2023-03-21 22:46:27');
+INSERT INTO `user_login` VALUES (298, 1, 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2Nzk0NTYwMjEsInVzZXJJZCI6MSwiaWF0IjoxNjc5NDQ4ODIxfQ.1WEweywjqu9yERZ48twtIpF-5zd7Yheot3PxEFMTGrE', '0:0:0:0:0:0:0:1', NULL, 'CHROME11', 'Windows 10', 1, '2023-03-22 09:33:42');
+INSERT INTO `user_login` VALUES (299, 1, 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2Nzk0NzI3MzgsInVzZXJJZCI6MSwiaWF0IjoxNjc5NDY1NTM4fQ.hynU1b7ZB4u6e4K7RS4fYKOGYjmd4rvhX__E4PqvWgs', '0:0:0:0:0:0:0:1', NULL, 'CHROME11', 'Windows 10', 1, '2023-03-22 14:12:19');
+INSERT INTO `user_login` VALUES (300, 1, 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2Nzk0ODAwMTksInVzZXJJZCI6MSwiaWF0IjoxNjc5NDcyODE5fQ.n2YU-bRX_iCSrdLgD_4wJ2oooFNKG5NMhOdi5C7jH-8', '0:0:0:0:0:0:0:1', NULL, 'CHROME11', 'Windows 10', 1, '2023-03-22 16:13:39');
+INSERT INTO `user_login` VALUES (301, 1, 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2Nzk0OTA3NDYsInVzZXJJZCI6MSwiaWF0IjoxNjc5NDgzNTQ2fQ.usrryPPD2VQLXPCCCMJt8aVd1zxeDbmfCWD7rUagf4c', '0:0:0:0:0:0:0:1', NULL, 'CHROME11', 'Windows 10', 1, '2023-03-22 19:12:26');
+INSERT INTO `user_login` VALUES (302, 1, 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2Nzk0OTM0NzYsInVzZXJJZCI6MSwiaWF0IjoxNjc5NDg2Mjc2fQ.PI4lGi3oapPy0qpNLyqSkujb8BeqkkhOnOVM-mSwslI', '0:0:0:0:0:0:0:1', NULL, 'CHROME11', 'Windows 10', 0, '2023-03-22 19:57:56');
+INSERT INTO `user_login` VALUES (303, 1, 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2Nzk0OTQzNjYsInVzZXJJZCI6MSwiaWF0IjoxNjc5NDg3MTY2fQ.NuaeDK7Zk20Ym1ODi25Ijq9AK9aqdzYoFqMlQK4AD-0', '0:0:0:0:0:0:0:1', NULL, 'CHROME11', 'Windows 10', 0, '2023-03-22 20:12:47');
+INSERT INTO `user_login` VALUES (304, 1, 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2Nzk1NDc0NzQsInVzZXJJZCI6MSwiaWF0IjoxNjc5NTQwMjc0fQ.0S44YYUERusnk9PYGZbB1z8mjCA5GdpqfaXOWJcDtYo', '0:0:0:0:0:0:0:1', NULL, 'CHROME11', 'Windows 10', 0, '2023-03-23 10:57:55');
+INSERT INTO `user_login` VALUES (305, 1, 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2Nzk1NjE5MDEsInVzZXJJZCI6MSwiaWF0IjoxNjc5NTU0NzAxfQ.lhkSg0uQDRb9Gsb1AxpkXqnJu--IVs52WFTe2xt6im0', '0:0:0:0:0:0:0:1', NULL, 'CHROME11', 'Windows 10', 1, '2023-03-23 14:58:21');
+INSERT INTO `user_login` VALUES (306, 1, 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2Nzk1Njg5NTAsInVzZXJJZCI6MSwiaWF0IjoxNjc5NTYxNzUwfQ.KbNNSdSzK5-bxGaIJZwmu6mUCXCW1a6brBaCoal_VOc', '0:0:0:0:0:0:0:1', NULL, 'CHROME11', 'Windows 10', 0, '2023-03-23 16:55:50');
+INSERT INTO `user_login` VALUES (307, 1, 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2Nzk1NjkwMjcsInVzZXJJZCI6MSwiaWF0IjoxNjc5NTYxODI3fQ.XLQgIQAZoT-yvfN2NpxEjdIYyiUll_XfD4NFmcoCmFg', '0:0:0:0:0:0:0:1', NULL, 'CHROME11', 'Windows 10', 0, '2023-03-23 16:57:07');
+INSERT INTO `user_login` VALUES (308, 1, 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2Nzk1NzA2NjEsInVzZXJJZCI6MSwiaWF0IjoxNjc5NTYzNDYxfQ.eSRe3H38hNq1yfsVHk4x340yW3DqIzYXTzugOkW2nNI', '0:0:0:0:0:0:0:1', NULL, 'CHROME11', 'Windows 10', 0, '2023-03-23 17:24:21');
+INSERT INTO `user_login` VALUES (309, 1, 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2Nzk1NzExNzMsInVzZXJJZCI6MSwiaWF0IjoxNjc5NTYzOTczfQ.VJmTo9MxFBxlrTGCNO18Vp6xJ-lTtTlfJNADZIGvj8o', '0:0:0:0:0:0:0:1', NULL, 'CHROME11', 'Windows 10', 0, '2023-03-23 17:32:53');
+INSERT INTO `user_login` VALUES (310, 2, 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2Nzk2NTcyNzcsInVzZXJJZCI6MiwiaWF0IjoxNjc5NjUwMDc3fQ.KcUv83e8RHSQbDMlW96m_tBAPhEkkNyKeXhrWt-RL7A', '0:0:0:0:0:0:0:1', NULL, 'CHROME11', 'Windows 10', 0, '2023-03-24 17:27:58');
+INSERT INTO `user_login` VALUES (311, 2, 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2Nzk2NTgzODUsInVzZXJJZCI6MiwiaWF0IjoxNjc5NjUxMTg1fQ.HQNbhIh-38mO3qb4Dc-ZjZQIe3QymDVHmKeYADaqCmI', '0:0:0:0:0:0:0:1', NULL, 'CHROME11', 'Windows 10', 0, '2023-03-24 17:46:26');
+INSERT INTO `user_login` VALUES (312, 2, 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2Nzk2NTg2MTksInVzZXJJZCI6MiwiaWF0IjoxNjc5NjUxNDE5fQ.1qA9gnVe6Qnzsn9YtalX4Q_xdre2XrPGLzP1E_oNrBY', '0:0:0:0:0:0:0:1', NULL, 'CHROME11', 'Windows 10', 0, '2023-03-24 17:50:20');
+INSERT INTO `user_login` VALUES (313, 2, 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2Nzk2NTkwNTcsInVzZXJJZCI6MiwiaWF0IjoxNjc5NjUxODU3fQ.uim5p2A_nhoHDQCeOYH33nKMowLLFbfHGBaXcBeKBK8', '0:0:0:0:0:0:0:1', NULL, 'CHROME11', 'Windows 10', 0, '2023-03-24 17:57:38');
+INSERT INTO `user_login` VALUES (314, 2, 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2Nzk2NjMwODgsInVzZXJJZCI6MiwiaWF0IjoxNjc5NjU1ODg4fQ.uZCVQIfH7C7DL5mV9WNsHyCIslAZek2P7a75IvfoblA', '0:0:0:0:0:0:0:1', NULL, 'CHROME11', 'Windows 10', 0, '2023-03-24 19:04:49');
+INSERT INTO `user_login` VALUES (315, 2, 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2Nzk2NjM0MjgsInVzZXJJZCI6MiwiaWF0IjoxNjc5NjU2MjI4fQ.ihx6M7mcPzVK_FmwcSJodM7qXXzlrEDk-_aAiRJhLV8', '0:0:0:0:0:0:0:1', NULL, 'CHROME11', 'Windows 10', 0, '2023-03-24 19:10:29');
+INSERT INTO `user_login` VALUES (316, 1, 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODExMzk3ODAsInVzZXJJZCI6MSwiaWF0IjoxNjgxMTM5NzIwfQ.T4sGa5w_G-PjbbMzgbUjRDNlnf0BnEwPPKPWzfrAgBk', '0:0:0:0:0:0:0:1', NULL, 'CHROME11', 'Windows 10', 0, '2023-04-10 23:15:21');
+INSERT INTO `user_login` VALUES (317, 1, 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODExMzk4NjYsInVzZXJJZCI6MSwiaWF0IjoxNjgxMTM5ODA2fQ.mgpjObRmVCINrtbELX5T-bfRrF70uGJB6HPLy6DkIUQ', '0:0:0:0:0:0:0:1', NULL, 'CHROME11', 'Windows 10', 1, '2023-04-10 23:16:46');
+INSERT INTO `user_login` VALUES (318, 1, 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODExMzk5NTEsInVzZXJJZCI6MSwiaWF0IjoxNjgxMTM5ODkxfQ.RhHU8RpqqldiF6RZ3zH7o8UsxwFrpWCC_TRCRq_gXes', '0:0:0:0:0:0:0:1', NULL, 'CHROME11', 'Windows 10', 1, '2023-04-10 23:18:11');
+INSERT INTO `user_login` VALUES (319, 1, 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODExNDAyNzksInVzZXJJZCI6MSwiaWF0IjoxNjgxMTQwMjE5fQ.r0Q6idRiBMWDj5MA60Pge-KsUVTRk5dl3UinYkAARlI', '0:0:0:0:0:0:0:1', NULL, 'CHROME11', 'Windows 10', 0, '2023-04-10 23:23:39');
+INSERT INTO `user_login` VALUES (320, 1, 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODExNDAzMjgsInVzZXJJZCI6MSwiaWF0IjoxNjgxMTQwMjY4fQ.X0ChM17Xh9g5W4QggZeUFB7dZWHguWtoMFK7kZmUvJ0', '0:0:0:0:0:0:0:1', NULL, 'CHROME11', 'Windows 10', 0, '2023-04-10 23:24:28');
+INSERT INTO `user_login` VALUES (321, 1, 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODExNDA0MTYsInVzZXJJZCI6MSwiaWF0IjoxNjgxMTQwMzU2fQ.Jh99kBOQJsOMLqTGWrYj3N-jy7XLODKPR8DLhM2WuLw', '0:0:0:0:0:0:0:1', NULL, 'CHROME11', 'Windows 10', 1, '2023-04-10 23:25:56');
+INSERT INTO `user_login` VALUES (322, 1, 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODExNDA1MDMsInVzZXJJZCI6MSwiaWF0IjoxNjgxMTQwNDQzfQ.pV3cPCCe_7UnCPq-0z3m_gsgw1WNRB5Q2rxoTI3OMd8', '0:0:0:0:0:0:0:1', NULL, 'CHROME11', 'Windows 10', 1, '2023-04-10 23:27:24');
+INSERT INTO `user_login` VALUES (323, 1, 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODExNDA1NjYsInVzZXJJZCI6MSwiaWF0IjoxNjgxMTQwNTA2fQ.MSRqu81hwmRI6x1UVfAyQ4Tqp52A6HLY-bheuxdnnGE', '0:0:0:0:0:0:0:1', NULL, 'CHROME11', 'Windows 10', 1, '2023-04-10 23:28:26');
+INSERT INTO `user_login` VALUES (324, 1, 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODExNDc4MzMsInVzZXJJZCI6MSwiaWF0IjoxNjgxMTQwNjMzfQ.F75o8MLVThzHtsSpLEkInNm_rX4qLj35zSdTF5XQQl4', '0:0:0:0:0:0:0:1', NULL, 'CHROME11', 'Windows 10', 1, '2023-04-10 23:30:33');
+INSERT INTO `user_login` VALUES (325, 1, 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODExNTIyOTcsInVzZXJJZCI6MSwiaWF0IjoxNjgxMTQ1MDk3fQ.BRBfqoF8s7jWZH6smhq6Va3PBlnGYVqDTPwR4vEH7kg', '0:0:0:0:0:0:0:1', NULL, 'CHROME11', 'Windows 10', 0, '2023-04-11 00:44:58');
+INSERT INTO `user_login` VALUES (326, 1, 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODExODIyNzYsInVzZXJJZCI6MSwiaWF0IjoxNjgxMTc1MDc2fQ.y6v1sEBy108TM__P0e45Bjkc94ZV5_JKs4ReJ3_khcA', '0:0:0:0:0:0:0:1', NULL, 'CHROME11', 'Windows 10', 1, '2023-04-11 09:04:37');
+INSERT INTO `user_login` VALUES (327, 2, 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODExNzg0MzUsInVzZXJJZCI6MiwiaWF0IjoxNjgxMTc3MjM1fQ.F9t_1UJNABSh0MkcCJCw2duJNA6YLTqRsOo0aY0EXSw', '0:0:0:0:0:0:0:1', NULL, 'CHROME11', 'Windows 10', 0, '2023-04-11 09:40:36');
+INSERT INTO `user_login` VALUES (328, 1, 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODExNzg3NDYsInVzZXJJZCI6MSwiaWF0IjoxNjgxMTc3NTQ2fQ.0p6n2SndTk8w_Lou1f8Mpw8RW0O7vyNbt69qYK5YPT0', '0:0:0:0:0:0:0:1', NULL, 'CHROME11', 'Windows 10', 0, '2023-04-11 09:45:46');
+INSERT INTO `user_login` VALUES (329, 1, 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODExNzkwMDYsInVzZXJJZCI6MSwiaWF0IjoxNjgxMTc3ODA2fQ.-UNatw91f7M-w4hurk_0PeqbDYxZYX7-73J03vLl3Z0', '0:0:0:0:0:0:0:1', NULL, 'CHROME11', 'Windows 10', 0, '2023-04-11 09:50:07');
+INSERT INTO `user_login` VALUES (330, 1, 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODExNzk4MTEsInVzZXJJZCI6MSwiaWF0IjoxNjgxMTc4NjExfQ.hcqWmhEM220MjOguFYbRdw-sswlxf55A_RKdN7WfkK8', '0:0:0:0:0:0:0:1', NULL, 'CHROME11', 'Windows 10', 0, '2023-04-11 10:03:32');
+INSERT INTO `user_login` VALUES (331, 2, 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODExNzk4NTIsInVzZXJJZCI6MiwiaWF0IjoxNjgxMTc4NjUyfQ.eDv9xhYUyM_I9RMaKEaI6jgpvTiel2Ns9pQpOjORqH8', '0:0:0:0:0:0:0:1', NULL, 'CHROME11', 'Windows 10', 0, '2023-04-11 10:04:12');
+INSERT INTO `user_login` VALUES (332, 1, 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODExODc0MTgsInVzZXJJZCI6MSwiaWF0IjoxNjgxMTgwMjE4fQ.kAFS7iWi1ENqnZW2-ww68JlhQjXTX-LnghOoRvcS0CA', '0:0:0:0:0:0:0:1', NULL, 'CHROME11', 'Windows 10', 1, '2023-04-11 10:30:19');
+INSERT INTO `user_login` VALUES (333, 1, 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODExOTY4NjUsInVzZXJJZCI6MSwiaWF0IjoxNjgxMTg5NjY1fQ.8aju3UxXOTmDLG1ZQuWE9S2g9SxyW6RMxa23Bz20Png', '0:0:0:0:0:0:0:1', NULL, 'CHROME11', 'Windows 10', 1, '2023-04-11 13:07:45');
+INSERT INTO `user_login` VALUES (334, 2, 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODExOTcwMTQsInVzZXJJZCI6MiwiaWF0IjoxNjgxMTg5ODE0fQ.moJwEMp_KPmD0_gnE7XkPcPXOScS9RoVuoqygBucNLc', '0:0:0:0:0:0:0:1', NULL, 'CHROME11', 'Windows 10', 0, '2023-04-11 13:10:15');
+INSERT INTO `user_login` VALUES (335, 2, 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODExOTcyNTQsInVzZXJJZCI6MiwiaWF0IjoxNjgxMTkwMDU0fQ.X6k7HduytYQW23m-tJAoT9WONXlKvPbw7Rwyt5cKyo8', '0:0:0:0:0:0:0:1', NULL, 'CHROME11', 'Windows 10', 0, '2023-04-11 13:14:15');
+INSERT INTO `user_login` VALUES (336, 1, 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODEyMDUxMjMsInVzZXJJZCI6MSwiaWF0IjoxNjgxMTk3OTIzfQ.zGK3ocY3K-WyJYp1hTbYPHhOp4oS1bzY0-L-zLQPLRQ', '0:0:0:0:0:0:0:1', NULL, 'CHROME11', 'Windows 10', 1, '2023-04-11 15:25:24');
+INSERT INTO `user_login` VALUES (337, 1, 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODEyMTQwMTksInVzZXJJZCI6MSwiaWF0IjoxNjgxMjA2ODE5fQ.fjF_2f3slTVWLbKvz-emrENmrd4S3RYmRqta8Ylb6Mk', '0:0:0:0:0:0:0:1', NULL, 'CHROME11', 'Windows 10', 1, '2023-04-11 17:53:39');
+INSERT INTO `user_login` VALUES (338, 1, 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODEyODI4OTYsInVzZXJJZCI6MSwiaWF0IjoxNjgxMjc1Njk2fQ.YfYM-L0Tc9QhQ6X8bCSBNy9sdZHU1jPO0p4kwqk0qQ8', '0:0:0:0:0:0:0:1', NULL, 'CHROME11', 'Windows 10', 1, '2023-04-12 13:01:37');
+INSERT INTO `user_login` VALUES (339, 1, 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODEyOTQxNDEsInVzZXJJZCI6MSwiaWF0IjoxNjgxMjg2OTQxfQ.b6azTFDIVkb3s7l2bDBfQz6sNzN2XNJsGznozOlAc_A', '0:0:0:0:0:0:0:1', NULL, 'CHROME11', 'Windows 10', 1, '2023-04-12 16:09:02');
 
 SET FOREIGN_KEY_CHECKS = 1;

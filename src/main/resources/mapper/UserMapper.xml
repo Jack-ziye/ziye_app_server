@@ -5,6 +5,7 @@
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.code.entity.system.SysUser">
         <id column="id" property="id" />
+        <result column="avatar" property="avatar" />
         <result column="username" property="username" />
         <result column="password" property="password" />
         <result column="mobile" property="mobile" />
@@ -20,6 +21,7 @@
     <sql id="BaseColumnList">
         t.id as userId,
         t.nickname as nickName,
+        t.avatar as avatar,
         t.username as username,
         t.password as password,
         t.mobile as mobile,

@@ -61,7 +61,6 @@ public class ProjectController {
             }
 
             HashMap<String, Object> params = new HashMap<String, Object>();
-            params.put("projectId", sysUser.getUserId());
 
             if (map.containsKey("projectName")) {
                 params.put("projectName", map.get("projectName"));

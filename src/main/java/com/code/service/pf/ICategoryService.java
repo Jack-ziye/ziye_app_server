@@ -3,6 +3,7 @@ package com.code.service.pf;
 import com.code.entity.pf.Category;
 import com.github.pagehelper.PageInfo;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -16,6 +17,8 @@ public interface ICategoryService {
      */
     PageInfo<Category> selectPageList(HashMap<String, Object> map, int pageNum, int pageSize);
 
+    List<Category> selectList();
+
     Category selectCategoryById(Long categoryId);
 
     int insertCategory(Category category);
@@ -28,5 +31,5 @@ public interface ICategoryService {
 
     int deleteBatch(List<Long> ids);
 
-    
+
 }

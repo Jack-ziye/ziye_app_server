@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.persistence.Transient;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -42,6 +43,11 @@ public class CategoryService implements ICategoryService {
         List<Category> categoryList = categoryMapper.selectPageList(map);
         PageInfo<Category> pages = new PageInfo<>(categoryList);
         return pages;
+    }
+
+    @Override
+    public List<Category> selectList() {
+        return categoryMapper.selectAll();
     }
 
     /**

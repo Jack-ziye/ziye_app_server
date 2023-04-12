@@ -24,6 +24,7 @@
     <sql id="BaseColumnList">
         t.id as projectId,
         t.category_id as categoryId,
+        t.cover as cover,
         t.`name` as projectName,
         t.content as content,
         t.quota as quota,
@@ -43,6 +44,9 @@
         <where>
             <if test="projectName != null and projectName != ''">
                 and t.`name` like CONCAT('%',#{projectName},'%')
+            </if>
+            <if test="categoryId != null and categoryId != ''">
+                and pc.`id` = #{categoryId}
             </if>
             <if test="categoryName != null and categoryName != ''">
                 and pc.`name` like CONCAT('%',#{categoryName},'%')

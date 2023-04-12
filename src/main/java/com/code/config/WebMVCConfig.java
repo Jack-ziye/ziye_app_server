@@ -28,7 +28,10 @@ public class WebMVCConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(loginInterceptor)
                 .addPathPatterns("/**").excludePathPatterns("/swagger-resources/**")
-                .excludePathPatterns("/user/login").excludePathPatterns("/user/register")
-                .excludePathPatterns("/send/code/mobile").excludePathPatterns("/user/mobile-login");
+                .excludePathPatterns("/static/**")
+                .excludePathPatterns("/user/login").excludePathPatterns("/user/logout")
+                .excludePathPatterns("/send/code/mobile").excludePathPatterns("/user/mobile-login")
+                .excludePathPatterns("/web/**");
     }
+
 }
