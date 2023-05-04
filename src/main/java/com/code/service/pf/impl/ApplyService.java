@@ -74,6 +74,11 @@ public class ApplyService implements IApplyService {
         return apply;
     }
 
+    @Override
+    public Apply selectByProjectIdAndTalentId(Long projectId, Long talentId) {
+        return applyMapper.selectByProjectIdAndTalentId(projectId, talentId);
+    }
+
 
     /**
      * 插入数据

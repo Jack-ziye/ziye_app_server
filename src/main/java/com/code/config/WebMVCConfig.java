@@ -30,8 +30,12 @@ public class WebMVCConfig implements WebMvcConfigurer {
                 .addPathPatterns("/**").excludePathPatterns("/swagger-resources/**")
                 .excludePathPatterns("/static/**")
                 .excludePathPatterns("/user/login").excludePathPatterns("/user/logout")
-                .excludePathPatterns("/send/code/mobile").excludePathPatterns("/user/mobile-login")
-                .excludePathPatterns("/web/**");
+                .excludePathPatterns("/user/mobile-login")
+                .excludePathPatterns("/send/code/mobile")
+                .excludePathPatterns("/web/**")
+                .excludePathPatterns("/talent/login")
+                .excludePathPatterns("/talent/mobile-login")
+                .excludePathPatterns("/talent/register");
     }
 
 }

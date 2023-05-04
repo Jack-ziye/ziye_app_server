@@ -3,6 +3,7 @@ package com.code.service.pf.impl;
 
 import com.code.entity.pf.Project;
 import com.code.entity.pf.Talent;
+import com.code.entity.system.SysUser;
 import com.code.mapper.pf.ProjectMapper;
 import com.code.mapper.pf.TalentMapper;
 import com.code.service.pf.ITalentService;
@@ -29,9 +30,7 @@ public class TalentService implements ITalentService {
     private ProjectMapper projectMapper;
 
     private void setUpdateInfo(Talent talent) {
-        Long userId = UserThreadLocal.get().getUserId();
         talent.setLmt(new Date());
-        talent.setModifier(userId);
     }
 
     /**
@@ -77,6 +76,16 @@ public class TalentService implements ITalentService {
         return talentMapper.selectById(talentId);
     }
 
+    @Override
+    public Talent selectTalentByName(String talentName) {
+        return talentMapper.selectByName(talentName);
+    }
+
+    @Override
+    public Talent selectTalentByMobile(String mobile) {
+        return talentMapper.selectByMobile(mobile);
+    }
+
 
     /**
      * 插入数据
@@ -86,11 +95,9 @@ public class TalentService implements ITalentService {
      */
     @Override
     public int insertTalent(Talent talent) {
-        Long userId = UserThreadLocal.get() == null ? null : UserThreadLocal.get().getUserId();
         Date date = new Date();
         talent.setCreateTime(date);
         talent.setLmt(date);
-        talent.setCreator(userId);
         setUpdateInfo(talent);
         return talentMapper.insertSelective(talent);
     }

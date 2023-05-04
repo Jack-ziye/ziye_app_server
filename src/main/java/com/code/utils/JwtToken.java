@@ -1,5 +1,6 @@
 package com.code.utils;
 
+import com.code.entity.pf.Talent;
 import com.code.entity.system.SysUser;
 import io.jsonwebtoken.*;
 
@@ -32,6 +33,25 @@ public class JwtToken {
 
         return "Bearer " + jwtBuilder.compact();
     }
+    /**
+     * token 创建
+     *
+     * @param talent 用户实体类
+     * @return token
+     */
+    public static String createToken(Talent talent) {
+
+        HashMap<String, Object> claim = new HashMap<>();
+        claim.put("talentId", talent.getTalentId());
+
+        JwtBuilder jwtBuilder = Jwts.builder()
+                .signWith(SignatureAlgorithm.HS256, tokenKey)
+                .setClaims(claim)
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + tokenTime * 1000));
+
+        return "Bearer " + jwtBuilder.compact();
+    }
 
     /**
      * refreshToken 创建
@@ -43,6 +63,26 @@ public class JwtToken {
 
         HashMap<String, Object> claim = new HashMap<>();
         claim.put("userId", user.getUserId());
+
+        JwtBuilder jwtBuilder = Jwts.builder()
+                .signWith(SignatureAlgorithm.HS256, tokenKey)
+                .setClaims(claim)
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + refreshTokenTime * 1000));
+
+        return "Bearer " + jwtBuilder.compact();
+    }
+
+    /**
+     * refreshToken 创建
+     *
+     * @param talent 用户实体类
+     * @return token
+     */
+    public static String createRefreshToken(Talent talent) {
+
+        HashMap<String, Object> claim = new HashMap<>();
+        claim.put("talentId", talent.getTalentId());
 
         JwtBuilder jwtBuilder = Jwts.builder()
                 .signWith(SignatureAlgorithm.HS256, tokenKey)

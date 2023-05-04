@@ -32,6 +32,32 @@ public class Talent {
     @JSONField(serialize = false)
     private String password;
 
+    @ApiModelProperty(value = "性别")
+    @Column(name = "gender")
+    @ExcelProperty("性别")
+    private Integer gender;
+
+    @ApiModelProperty(value = "出生日期")
+    @Column(name = "birth_time")
+    @ExcelProperty("出生日期")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+    private Date birthTime;
+
+    @ApiModelProperty(value = "微信号")
+    @Column(name = "wechat")
+    @ExcelProperty("手机号")
+    private String wechat;
+
+    @ApiModelProperty(value = "籍贯")
+    @Column(name = "native_place")
+    @ExcelProperty("籍贯")
+    private String nativePlace;
+
+    @ApiModelProperty(value = "住址")
+    @Column(name = "address")
+    @ExcelProperty("住址")
+    private String address;
+
     @ApiModelProperty(value = "手机号")
     @Column(name = "mobile")
     @ExcelProperty("手机号")
@@ -51,18 +77,15 @@ public class Talent {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date createTime;
 
-    @ApiModelProperty(value = "创建人")
-    @Column(name = "creator")
-    private Long creator;
-
     @ApiModelProperty(value = "最后更新时间")
     @Column(name = "lmt")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date lmt;
 
-    @ApiModelProperty(value = "最后修改人")
-    @Column(name = "modifier")
-    private Long modifier;
+    @ApiModelProperty(value = "性别名称")
+    @ExcelProperty("性别名称")
+    @Transient
+    private String genderName;
 
     @ApiModelProperty(value = "状态名称")
     @ExcelProperty("状态名称")

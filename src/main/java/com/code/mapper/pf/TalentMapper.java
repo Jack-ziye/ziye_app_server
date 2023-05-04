@@ -1,6 +1,7 @@
 package com.code.mapper.pf;
 
 import com.code.entity.pf.Talent;
+import com.code.entity.system.SysUser;
 import tk.mybatis.mapper.common.Mapper;
 
 import java.util.ArrayList;
@@ -25,6 +26,10 @@ public interface TalentMapper extends Mapper<Talent> {
      */
     Talent selectById(Long talentId);
 
+    Talent selectByName(String talentName);
+
+    Talent selectByMobile(String mobile);
+
     /**
      * 更新状态
      *
@@ -41,5 +46,8 @@ public interface TalentMapper extends Mapper<Talent> {
      * @return 人才列表
      */
     ArrayList<Talent> selectListByProjectId(Long projectId);
+
+
+
 
 }

@@ -33,6 +33,9 @@
             <if test="projectName != null and projectName != ''">
                 and pp.`name` like CONCAT('%',#{projectName},'%')
             </if>
+            <if test="talentId != null and talentId != ''">
+                and t.talent_id=#{talentId}
+            </if>
             <if test="talentName != null and talentName != ''">
                 and pt.talent_name like CONCAT('%',#{talentName},'%')
             </if>
@@ -47,6 +50,7 @@
         SELECT
             sd.`value` as statusName,
             pp.`name` as projectName,
+            pc.`name` as categoryName,
             pt.talent_name as talentName,
             <include refid="BaseColumnList"/>
         FROM
@@ -54,6 +58,7 @@
             LEFT JOIN sys_dict sd ON sd.`key` = t.status AND sd.type = 'pf_apply_status' AND sd.`status` = 0
             LEFT JOIN `pf_project` pp ON pp.id = t.project_id
             LEFT JOIN `pf_talent` pt ON pt.id = t.talent_id
+            LEFT JOIN `pf_category` pc ON pc.id = pp.category_id
             <include refid="BaseWhere"/>
         ORDER BY
             t.create_time DESC
@@ -64,6 +69,7 @@
         SELECT
             sd.`value` as statusName,
             pp.`name` as projectName,
+            pc.`name` as categoryName,
             pt.talent_name as talentName,
             <include refid="BaseColumnList"/>
         FROM
@@ -71,8 +77,27 @@
             LEFT JOIN sys_dict sd ON sd.`key` = t.status AND sd.type = 'pf_apply_status' AND sd.`status` = 0
             LEFT JOIN `pf_project` pp ON pp.id = t.project_id
             LEFT JOIN `pf_talent` pt ON pt.id = t.talent_id
+            LEFT JOIN `pf_category` pc ON pc.id = pp.category_id
         WHERE
             t.id=#{applyId}
+    </select>
+
+    <!-- 查看详情 -->
+    <select id="selectByProjectIdAndTalentId" resultType="com.code.entity.pf.Apply">
+        SELECT
+            sd.`value` as statusName,
+            pp.`name` as projectName,
+            pc.`name` as categoryName,
+            pt.talent_name as talentName,
+            <include refid="BaseColumnList"/>
+        FROM
+            `pf_apply` as t
+            LEFT JOIN sys_dict sd ON sd.`key` = t.status AND sd.type = 'pf_apply_status' AND sd.`status` = 0
+            LEFT JOIN `pf_project` pp ON pp.id = t.project_id
+            LEFT JOIN `pf_talent` pt ON pt.id = t.talent_id
+            LEFT JOIN `pf_category` pc ON pc.id = pp.category_id
+        WHERE
+            t.project_id=#{projectId} AND t.talent_id=#{talentId}
     </select>
 
     <!-- 状态变更   -->

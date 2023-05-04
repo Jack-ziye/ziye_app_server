@@ -14,4 +14,6 @@ public interface ApplyMapper extends Mapper<Apply> {
 
     int updateStatus(Long applyId);
 
+    Apply selectByProjectIdAndTalentId(Long projectId, Long talentId);
+
 }

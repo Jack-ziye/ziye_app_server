@@ -41,6 +41,10 @@ public class Project {
     @Column(name = "`content`")
     private String content;
 
+    @ApiModelProperty(value = "费用")
+    @Column(name = "expense")
+    private Double expense;
+
     @ApiModelProperty(value = "名额")
     @Column(name = "`quota`")
     private Integer quota;

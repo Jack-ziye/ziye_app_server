@@ -1,13 +1,10 @@
-package com.code.controller.pf;
+package com.code.controller.system;
 
 import com.code.common.logAop.LogAnnotation;
-import com.code.entity.pf.Talent;
-import com.code.entity.system.SysUser;
-import com.code.service.pf.ITalentService;
-import com.code.utils.Md5Utils;
+import com.code.entity.system.Notice;
+import com.code.service.system.INoticeService;
 import com.code.utils.Result;
 import com.code.utils.ResultCode;
-import com.code.utils.UserThreadLocal;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -29,14 +26,14 @@ import java.util.Map;
  * @since 2022-10-30
  */
 @RestController
-@Api(tags = "报名-人才管理接口")
-@RequestMapping("/talent")
-public class TalentController {
+@Api(tags = "通知公告管理接口")
+@RequestMapping("/notice")
+public class NoticeController {
 
     @Resource
-    private ITalentService iTalentService;
+    private INoticeService iNoticeService;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(TalentController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(NoticeController.class);
 
     /**
      * 查询列表
@@ -45,11 +42,12 @@ public class TalentController {
      * @param map      map
      * @return Result
      */
-    @ApiOperation(value = "查询列表", notes = "{\"pageNum\": 1,\"pageSize\": 10} searchWord (用户名)关键词[可选]")
+    @ApiOperation(value = "查询列表", notes = "{\"pageNum\": 1,\"pageSize\": 10}")
     @PostMapping("/list")
-    @LogAnnotation(module = "用户管理接口", operator = "获取新闻列表")
+    @LogAnnotation(module = "通知公告管理接口", operator = "获取通知公告列表")
     public Result userList(HttpServletResponse response, @RequestBody(required = false) Map<String, String> map) {
         response.setCharacterEncoding("utf-8");
+
         int pageNum = 1;//默认从第一页查询
         int pageSize = 10;//默认每页展示10条
         try {
@@ -62,15 +60,18 @@ public class TalentController {
 
             HashMap<String, Object> params = new HashMap<String, Object>();
 
-            if (map.containsKey("talentName")) {
-                params.put("talentName", map.get("talentName"));
+            if (map.containsKey("title")) {
+                params.put("title", map.get("title"));
+            }
+            if (map.containsKey("noticeType")) {
+                params.put("noticeType", map.get("noticeType"));
             }
             if (map.containsKey("creatTimeFrom") && map.containsKey("creatTimeTo")) {
                 params.put("creatTimeFrom", map.get("creatTimeFrom"));
                 params.put("creatTimeTo", map.get("creatTimeTo"));
             }
 
-            PageInfo<Talent> pages = iTalentService.selectPageList(params, pageNum, pageSize);
+            PageInfo<Notice> pages = iNoticeService.selectPageList(params, pageNum, pageSize);
             return Result.ok().putPage(pages);
 
         } catch (Exception e) {
@@ -88,10 +89,9 @@ public class TalentController {
      */
     @ApiOperation(value = "新增数据")
     @PostMapping("/insert")
-    @LogAnnotation(module = "菜单管理接口", operator = "新增数据")
-    public Result insert(@RequestBody Talent talent) {
-        talent.setPassword(Md5Utils.encrypt(talent.getPassword()));
-        int status = iTalentService.insertTalent(talent);
+    @LogAnnotation(module = "通知公告管理接口", operator = "新增数据")
+    public Result insert(@RequestBody Notice notice) {
+        int status = iNoticeService.insertNotice(notice);
         if (status > 0) {
             return Result.ok("添加成功");
         } else {
@@ -107,8 +107,8 @@ public class TalentController {
      */
     @ApiOperation(value = "修改数据")
     @PostMapping("/update")
-    public Result update(@RequestBody Talent talent) {
-        int status = iTalentService.updateTalent(talent);
+    public Result update(@RequestBody Notice notice) {
+        int status = iNoticeService.updateNotice(notice);
         if (status > 0) {
             return Result.ok("更新成功");
         } else {
@@ -117,16 +117,16 @@ public class TalentController {
     }
 
     /**
-     * 用户状态变更
+     * 通知公告状态变更
      *
      * @param Id Id
      * @return Result
      */
-    @ApiOperation(value = "用户状态变更")
+    @ApiOperation(value = "通知公告状态变更")
     @GetMapping("/update/status")
-    @LogAnnotation(module = "菜单管理接口", operator = "菜单状态变更")
+    @LogAnnotation(module = "通知公告管理接口", operator = "通知公告状态变更")
     public Result updateStatus(@RequestParam(value = "id") Long Id) {
-        int status = iTalentService.updateStatus(Id);
+        int status = iNoticeService.updateStatus(Id);
         if (status == 0) {
             return Result.error(ResultCode.UPDATE_ERROR);
         }
@@ -141,25 +141,11 @@ public class TalentController {
      * @return Result
      */
     @ApiOperation(value = "查看详情")
-    @GetMapping("/details")
-    public Result details(@RequestParam Long id) {
-        Talent talent  = iTalentService.selectDetails(id);
-        return Result.ok().put(talent);
-    }
-
-    /**
-     * 根据id获取人才信息
-     *
-     * @param id id
-     * @return Result
-     */
-    @ApiOperation(value = "查看详情")
     @GetMapping("/info")
     public Result info(@RequestParam Long id) {
-        Talent talent  = iTalentService.selectTalentById(id);
-        return Result.ok().put(talent);
+        Notice notice  = iNoticeService.selectNoticeById(id);
+        return Result.ok().put(notice);
     }
-
 
     /**
      * 根据ID删除记录
@@ -170,7 +156,7 @@ public class TalentController {
     @ApiOperation(value = "根据ID删除记录")
     @PostMapping("/delete")
     public Result delete(@RequestParam Long id) {
-        int status = iTalentService.deleteTalent(id);
+        int status = iNoticeService.deleteNotice(id);
         if (status > 0) {
             return Result.ok("删除成功");
         } else {

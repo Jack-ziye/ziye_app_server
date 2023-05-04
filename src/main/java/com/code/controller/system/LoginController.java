@@ -187,7 +187,7 @@ public class LoginController {
      */
     @ApiOperation(value = "登录续期")
     @GetMapping("/token/refresh")
-    public Result tokenRefresh(@RequestHeader("Authorization") String accToken, @RequestHeader("Refresh_token") String refToken) {
+    public Result tokenRefresh(@RequestHeader("Authorization") String accToken, @RequestHeader("Refresh-Token") String refToken) {
         // 获取用户信息
         Object getUser = redisUtil.get("TOKEN_REFRESH_" + refToken);
         SysUser user = JSON.parseObject(JSON.toJSONString(getUser), SysUser.class);

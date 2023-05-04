@@ -1,5 +1,6 @@
 package com.code.utils;
 
+import com.code.entity.pf.Talent;
 import com.code.entity.system.SysUser;
 
 public class UserThreadLocal {
@@ -8,6 +9,7 @@ public class UserThreadLocal {
     }
 
     private static final ThreadLocal<SysUser> LOCAL = new ThreadLocal<>();
+
 
     public static void put(SysUser user) {
         LOCAL.set(user);

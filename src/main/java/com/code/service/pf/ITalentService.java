@@ -1,6 +1,7 @@
 package com.code.service.pf;
 
 import com.code.entity.pf.Talent;
+import com.code.entity.system.SysUser;
 import com.github.pagehelper.PageInfo;
 
 import java.util.HashMap;
@@ -31,6 +32,10 @@ public interface ITalentService {
      * @return Result
      */
     Talent selectTalentById(Long talentId);
+
+    Talent selectTalentByName(String talentName);
+
+    Talent selectTalentByMobile(String mobile);
 
     int insertTalent(Talent talent);
 

@@ -20,6 +20,8 @@ public interface IApplyService {
 
     Apply selectDetails(Long applyId);
 
+    Apply selectByProjectIdAndTalentId(Long projectId, Long talentId);
+
     /**
      * 插入数据
      *
@@ -35,7 +37,6 @@ public interface IApplyService {
     int deleteApply(Long applyId);
 
     int deleteBatch(List<Long> ids);
-
 
 
 }

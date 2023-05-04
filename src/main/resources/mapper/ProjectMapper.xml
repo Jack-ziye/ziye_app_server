@@ -27,6 +27,7 @@
         t.cover as cover,
         t.`name` as projectName,
         t.content as content,
+        t.expense as expense,
         t.quota as quota,
         t.start_time as startTime,
         t.end_time as endTime,
@@ -37,6 +38,14 @@
         t.creator as creator,
         t.lmt as lmt,
         t.modifier as modifier
+    </sql>
+
+    <sql id="BaseTimeCompute">
+        IF(TIMESTAMPDIFF( SECOND, t.start_time, NOW()) > 0,
+            IF(TIMESTAMPDIFF(SECOND,t.end_time,NOW()) > 0, 0, TIMESTAMPDIFF(SECOND, NOW(), t.end_time)),
+            TIMESTAMPDIFF( SECOND, t.start_time, NOW())) AS diffTime,
+        IF( t.quota ='-1', t.quota, ( SELECT t.quota - COUNT( pa.id ) FROM pf_apply pa WHERE pa.project_id = t.id )) AS diffQuota,
+        IF(TIMESTAMPDIFF ( SECOND, t.start_time, NOW() ) > 0, IF(TIMESTAMPDIFF ( SECOND,t.end_time, NOW()) > 0, "已结束", "进行中"), "未开始") AS statusInfo
     </sql>
 
     <!-- 通用查询条件 -->
@@ -51,6 +60,17 @@
             <if test="categoryName != null and categoryName != ''">
                 and pc.`name` like CONCAT('%',#{categoryName},'%')
             </if>
+            <if test="statusTime != null and statusTime != ''">
+                <if test="statusTime == '未开始'">
+                    and t.start_time > NOW()
+                </if>
+                <if test="statusTime == '进行中'">
+                    and NOW() BETWEEN t.start_time AND t.end_time
+                </if>
+                <if test="statusTime == '已结束'">
+                    and NOW() > t.end_time
+                </if>
+            </if>
             <if test="creatTimeFrom != null and creatTimeFrom != '' and creatTimeTo != null and creatTimeTo != ''">
                 and t.create_time BETWEEN #{creatTimeFrom} AND #{creatTimeTo}
             </if>
@@ -63,11 +83,7 @@
             sd.`value` as statusName,
             pc.`name` as categoryName,
             su.username AS username,
-            IF(TIMESTAMPDIFF( SECOND, t.start_time, NOW()) > 0,
-                IF(TIMESTAMPDIFF(SECOND,t.end_time,NOW()) > 0, 0, TIMESTAMPDIFF(SECOND, NOW(), t.end_time)),
-                TIMESTAMPDIFF( SECOND, t.start_time, NOW())) AS diffTime,
-            IF( t.quota ='-1', t.quota, ( SELECT t.quota - COUNT( pa.id ) FROM pf_apply pa WHERE pa.project_id = t.id )) AS diffQuota,
-            IF(TIMESTAMPDIFF ( SECOND, t.start_time, NOW() ) > 0, IF(TIMESTAMPDIFF ( SECOND,t.end_time, NOW()) > 0, "已结束", "进行中"), "未开始") AS statusInfo,
+            <include refid="BaseTimeCompute"/>,
             <include refid="BaseColumnList"/>
         FROM
             `pf_project` as t
@@ -85,11 +101,7 @@
             sd.`value` as statusName,
             pc.`name` as categoryName,
             su.username AS username,
-            IF(TIMESTAMPDIFF( SECOND, t.start_time, NOW()) > 0,
-                IF(TIMESTAMPDIFF(SECOND,t.end_time,NOW()) > 0, 0, TIMESTAMPDIFF(SECOND, NOW(), t.end_time)),
-                TIMESTAMPDIFF( SECOND, t.start_time, NOW())) AS diffTime,
-            IF( t.quota ='-1', t.quota, ( SELECT t.quota - COUNT( pa.id ) FROM pf_apply pa WHERE pa.project_id = t.id )) AS diffQuota,
-            IF(TIMESTAMPDIFF ( SECOND, t.start_time, NOW() ) > 0, IF(TIMESTAMPDIFF ( SECOND,t.end_time, NOW()) > 0, "已结束", "进行中"), "未开始") AS statusInfo,
+            <include refid="BaseTimeCompute"/>,
             <include refid="BaseColumnList"/>
         FROM
             `pf_project` as t
@@ -115,11 +127,7 @@
             pc.`name` as categoryName,
             ppt.create_time as applyTime,
             ppt_sd.`value` as applyStatusName,
-            IF(TIMESTAMPDIFF( SECOND, t.start_time, NOW()) > 0,
-                IF(TIMESTAMPDIFF(SECOND,t.end_time,NOW()) > 0, 0, TIMESTAMPDIFF(SECOND, NOW(), t.end_time)),
-                TIMESTAMPDIFF( SECOND, t.start_time, NOW())) AS diffTime,
-            IF( t.quota ='-1', t.quota, ( SELECT t.quota - COUNT( pa.id ) FROM pf_apply pa WHERE pa.project_id = t.id )) AS diffQuota,
-            IF(TIMESTAMPDIFF ( SECOND, t.start_time, NOW() ) > 0, IF(TIMESTAMPDIFF ( SECOND,t.end_time, NOW()) > 0, "已结束", "进行中"), "未开始") AS statusInfo,
+            <include refid="BaseTimeCompute"/>,
             <include refid="BaseColumnList"/>
         FROM
             `pf_project` as t

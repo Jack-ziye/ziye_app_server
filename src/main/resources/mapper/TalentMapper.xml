@@ -12,22 +12,22 @@
         <result column="status" property="status" />
         <result column="create_time" property="createTime" />
         <result column="creator" property="creator" />
-        <result column="lmt" property="lmt" />
-        <result column="modifier" property="modifier" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="BaseColumnList">
         t.id as talentId,
         t.talent_name as talentName,
-        t.password as password,
+        t.gender as gender,
+        t.birth_time as birthTime,
+        t.wechat as wechat,
+        t.native_place as nativePlace,
+        t.address as address,
         t.mobile as mobile,
         t.email as email,
         t.status as status,
         t.create_time as createTime,
-        t.creator as creator,
-        t.lmt as lmt,
-        t.modifier as modifier
+        t.lmt as lmt
     </sql>
 
     <!-- 通用查询条件 -->
@@ -59,12 +59,39 @@
     <select id="selectById" resultType="com.code.entity.pf.Talent">
         SELECT
             sd.`value` as statusName,
+            sd2.`value` as genderName,
+            <include refid="BaseColumnList"/>
+        FROM
+            `pf_talent` as t
+            LEFT JOIN sys_dict sd ON sd.`key` = t.status AND sd.type = 'system_status' AND sd.`status` = 0
+            LEFT JOIN sys_dict sd2 ON sd2.`key` = t.gender AND sd2.type = 'system_gender' AND sd2.`status` = 0
+        WHERE
+            t.id=#{talentId}
+    </select>
+
+    <!-- 查看详情 -->
+    <select id="selectByName" resultType="com.code.entity.pf.Talent">
+        SELECT
+            sd.`value` as statusName,
+            t.password as password,
             <include refid="BaseColumnList"/>
         FROM
             `pf_talent` as t
             LEFT JOIN sys_dict sd ON sd.`key` = t.status AND sd.type = 'system_status' AND sd.`status` = 0
         WHERE
-            t.id=#{talentId}
+            t.talent_name=#{talentName}
+    </select>
+
+    <!-- 查看详情 -->
+    <select id="selectByMobile" resultType="com.code.entity.pf.Talent">
+        SELECT
+            sd.`value` as statusName,
+            <include refid="BaseColumnList"/>
+        FROM
+            `pf_talent` as t
+            LEFT JOIN sys_dict sd ON sd.`key` = t.status AND sd.type = 'system_status' AND sd.`status` = 0
+        WHERE
+            t.mobile=#{mobile}
     </select>
 
     <!-- 状态变更  -->

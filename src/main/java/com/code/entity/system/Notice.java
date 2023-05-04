@@ -1,4 +1,4 @@
-package com.code.entity.pf;
+package com.code.entity.system;
 
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -10,30 +10,30 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Data
-@Table(name = "`pf_apply`")
-@ApiModel(value="apply对象", description="")
-public class Apply {
+@Table(name = "`sys_notice`")
+@ApiModel(value="notice对象", description="通知公告对象")
+public class Notice {
 
     private static final long serialVersionUID = 1L;
 
     @Id
     @Column(name = "`id`")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long applyId;
+    private Long noticeId;
 
-    @ApiModelProperty(value = "项目id")
-    @Column(name = "`project_id`")
-    private Long projectId;
+    @ApiModelProperty(value = "标题")
+    @Column(name = "`title`")
+    private String title;
 
-    @ApiModelProperty(value = "人才id")
-    @Column(name = "talent_id")
-    private Long talentId;
+    @ApiModelProperty(value = "内容")
+    @Column(name = "`content`")
+    private String content;
 
-    @ApiModelProperty(value = "反馈信息")
-    @Column(name = "feedback")
-    private String feedback;
+    @ApiModelProperty(value = "类型")
+    @Column(name = "type")
+    private Integer noticeType;
 
-    @ApiModelProperty(value = "新闻状态")
+    @ApiModelProperty(value = "状态")
     @Column(name = "`status`")
     private Integer status;
 
@@ -46,34 +46,22 @@ public class Apply {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date createTime;
 
+    @ApiModelProperty(value = "创建人")
+    @Column(name = "creator")
+    private Long creator;
+
     @ApiModelProperty(value = "最后更新时间")
     @Column(name = "lmt")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date lmt;
 
+    @ApiModelProperty(value = "最后修改人")
+    @Column(name = "modifier")
+    private Long modifier;
+
     @ApiModelProperty(value = "状态名称")
     @ExcelProperty("状态名称")
     @Transient
     private String statusName;
-
-    @ApiModelProperty(value = "项目名称")
-    @Transient
-    private String projectName;
-
-    @ApiModelProperty(value = "类别名称")
-    @Transient
-    private String categoryName;
-
-    @ApiModelProperty(value = "人才名称")
-    @Transient
-    private String talentName;
-
-    @ApiModelProperty(value = "项目")
-    @Transient
-    private Project project;
-
-    @ApiModelProperty(value = "人才")
-    @Transient
-    private Talent talent;
 
 }
