@@ -125,6 +125,16 @@ public class NewsService implements INewsService {
         return 1;
     }
 
+    /**
+     * 更新阅读数
+     *
+     * @param newsId 新闻id
+     * @return status
+     */
+    @Override
+    public int updateNewsReads(Long newsId) {
+        return newsMapper.updateNewsReads(newsId);
+    }
 
 
 }

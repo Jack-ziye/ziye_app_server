@@ -28,5 +28,5 @@ public interface INewsService {
 
     int deleteBatch(List<Long> ids);
 
-    
+    int updateNewsReads(Long newsId);
 }

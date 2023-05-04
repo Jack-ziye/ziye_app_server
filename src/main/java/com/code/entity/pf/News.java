@@ -21,17 +21,25 @@ public class News {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long newsId;
 
+    @ApiModelProperty(value = "封面地址")
+    @Column(name = "cover")
+    private String cover;
+
     @ApiModelProperty(value = "新闻名称")
     @Column(name = "`title`")
     private String title;
+
+    @ApiModelProperty(value = "副标题")
+    @Column(name = "`subtitle`")
+    private String subtitle;
 
     @ApiModelProperty(value = "新闻名称")
     @Column(name = "`content`")
     private String content;
 
-    @ApiModelProperty(value = "显示顺序")
-    @Column(name = "order_Index")
-    private Integer orderIndex;
+    @ApiModelProperty(value = "阅读数")
+    @Column(name = "reads")
+    private Long reads;
 
     @ApiModelProperty(value = "新闻状态")
     @Column(name = "`status`")

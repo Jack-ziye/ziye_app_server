@@ -1,7 +1,9 @@
 package com.code.utils;
 
+import com.code.entity.pf.News;
 import com.code.entity.system.LoginLog;
 import com.code.entity.system.SysUser;
+import com.code.service.pf.INewsService;
 import com.code.service.system.ILoginService;
 import eu.bitwalker.useragentutils.UserAgent;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +23,9 @@ public class ThreadService {
     private ILoginService iLoginService;
 
     @Resource
+    private INewsService iNewsService;
+
+    @Resource
     private RedisUtil redisUtil;
 
     /**
@@ -36,6 +41,16 @@ public class ThreadService {
         redisUtil.set("ONLINE_USER_" + loginLog.getUserId(), loginLog, 30, TimeUnit.MINUTES);
 
         log.info("==================== 添加登录日志 end ====================");
+    }
+
+    /**
+     * 更新阅读数
+     *
+     * @param news 登录日志信息
+     */
+    @Async("TaskExecutor")
+    public void updateNewsReads(News news) {
+        iNewsService.updateNewsReads(news.getNewsId());
     }
 
 }

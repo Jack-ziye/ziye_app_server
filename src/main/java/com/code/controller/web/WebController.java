@@ -1,17 +1,9 @@
 package com.code.controller.web;
 
 
-import com.alibaba.fastjson2.JSON;
 import com.code.common.logAop.LogAnnotation;
-import com.code.entity.pf.Apply;
-import com.code.entity.pf.Category;
-import com.code.entity.pf.Project;
-import com.code.entity.pf.Talent;
-import com.code.entity.system.SysUser;
-import com.code.service.pf.IApplyService;
-import com.code.service.pf.ICategoryService;
-import com.code.service.pf.IProjectService;
-import com.code.service.pf.ITalentService;
+import com.code.entity.pf.*;
+import com.code.service.pf.*;
 import com.code.utils.*;
 import com.code.vo.ProjectTalentParam;
 import com.github.pagehelper.PageInfo;
@@ -40,6 +32,9 @@ import java.util.Map;
 public class WebController {
 
     @Resource
+    private INewsService iNewsService;
+
+    @Resource
     private ICategoryService iCategoryService;
 
     @Resource
@@ -47,6 +42,60 @@ public class WebController {
 
     @Resource
     private IApplyService iApplyService;
+
+    @Resource
+    private ThreadService threadService;
+
+
+    /**
+     * 查询列表
+     *
+     * @param response response
+     * @param map      map
+     * @return Result
+     */
+    @ApiOperation(value = "查询新闻列表", notes = "{\"pageNum\": 1,\"pageSize\": 10}")
+    @PostMapping("/news/list")
+    public Result userList(HttpServletResponse response, @RequestBody(required = false) Map<String, String> map) {
+        response.setCharacterEncoding("utf-8");
+
+        int pageNum = 1;//默认从第一页查询
+        int pageSize = 10;//默认每页展示10条
+        if (map.containsKey("pageNum")) {
+            pageNum = Integer.parseInt(map.get("pageNum"));
+        }
+        if (map.containsKey("pageSize")) {
+            pageSize = Integer.parseInt(map.get("pageSize"));
+        }
+
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("status", "0");
+        if (map.containsKey("title")) {
+            params.put("title", map.get("title"));
+        }
+        if (map.containsKey("creatTimeFrom") && map.containsKey("creatTimeTo")) {
+            params.put("creatTimeFrom", map.get("creatTimeFrom"));
+            params.put("creatTimeTo", map.get("creatTimeTo"));
+        }
+
+        PageInfo<News> pages = iNewsService.selectPageList(params, pageNum, pageSize);
+
+        return Result.ok().putPage(pages);
+    }
+
+    /**
+     * 查看详情
+     *
+     * @param id id
+     * @return Result
+     */
+    @ApiOperation(value = "查看详情")
+    @GetMapping("/news/details")
+    public Result info(@RequestParam Long id) {
+        News news = iNewsService.selectNewsById(id);
+        threadService.updateNewsReads(news);
+        return Result.ok().put(news);
+    }
 
     /**
      * 获取类别列表

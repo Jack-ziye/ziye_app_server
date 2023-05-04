@@ -14,4 +14,5 @@ public interface NewsMapper extends Mapper<News> {
 
     int updateStatus(Long newsId);
 
+    int updateNewsReads(Long newsId);
 }

@@ -20,8 +20,9 @@
     <sql id="BaseColumnList">
         t.id as newsId,
         t.title as title,
+        t.subtitle as subtitle,
         t.content as content,
-        t.order_index as orderIndex,
+        t.`reads` as `reads`,
         t.is_top as isTop,
         t.status as status,
         t.create_time as createTime,
@@ -33,6 +34,9 @@
     <!-- 通用查询条件 -->
     <sql id="BaseWhere">
         <where>
+            <if test="status != null and status != ''">
+                t.`status` = #{status}
+            </if>
             <if test="title != null and title != ''">
                 and t.title like CONCAT('%',#{title},'%')
             </if>
@@ -71,6 +75,14 @@
     <update id="updateStatus">
         UPDATE pf_news t
         SET t.`status` = ABS( t.`status` - 1 )
+        WHERE
+            t.id = #{newsId}
+    </update>
+
+    <!-- 更新阅读数   -->
+    <update id="updateNewsReads">
+        UPDATE pf_news t
+        SET t.`reads` = t.`reads`+1
         WHERE
             t.id = #{newsId}
     </update>
