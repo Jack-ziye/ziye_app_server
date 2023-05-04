@@ -60,6 +60,7 @@ public class ApplyController {
             }
 
             HashMap<String, Object> params = new HashMap<String, Object>();
+            params.put("status", "0");
 
             if (map.containsKey("projectName")) {
                 params.put("projectName", map.get("projectName"));

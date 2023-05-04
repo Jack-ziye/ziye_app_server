@@ -29,7 +29,9 @@
     <!-- 通用查询条件 -->
     <sql id="BaseWhere">
         <where>
-            t.`status` = 0
+            <if test="status != null and status != ''">
+                t.`status` = #{status}
+            </if>
             <if test="projectName != null and projectName != ''">
                 and pp.`name` like CONCAT('%',#{projectName},'%')
             </if>

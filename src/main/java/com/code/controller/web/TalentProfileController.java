@@ -86,7 +86,12 @@ public class TalentProfileController {
         HashMap<String, Object> params = new HashMap<String, Object>();
         Talent talent = TalentThreadLocal.get();
         params.put("talentId", talent.getTalentId());
-
+        if (map.containsKey("projectName")) {
+            params.put("projectName", map.get("projectName"));
+        }
+        if (map.containsKey("status")) {
+            params.put("status", map.get("status"));
+        }
         PageInfo<Apply> pages = iApplyService.selectPageList(params, pageNum, pageSize);
         return Result.ok().putPage(pages);
     }
