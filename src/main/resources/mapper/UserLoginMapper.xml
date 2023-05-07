@@ -19,6 +19,7 @@
     <sql id="BaseColumnList">
         t.id as id,
         t.user_id as userId,
+        t.token as token,
         t.address as address,
         t.place as place,
         t.browser as browser,
@@ -42,10 +43,6 @@
         </where>
     </sql>
 
-    <sql id="BaseTables">
-        user_login t
-        LEFT JOIN sys_user AS su ON t.user_id = su.id
-    </sql>
 
     <!-- 分页查询 -->
     <select id="selectPage" resultType="com.code.entity.system.LoginLog">
@@ -53,7 +50,8 @@
             su.username as username,
             <include refid="BaseColumnList"/>
         FROM
-            <include refid="BaseTables"/>
+            user_login t
+            LEFT JOIN sys_user AS su ON t.user_id = su.id
             <include refid="BaseWhere"/>
         <choose>
             <when test="sort != null and sort.trim() != ''">
@@ -63,6 +61,20 @@
                 order by t.login_time DESC
 			</otherwise>
         </choose>
+    </select>
+
+    <!-- 分页查询 -->
+    <select id="selectLatest" resultType="com.code.entity.system.LoginLog">
+        SELECT
+            su.username as username,
+            <include refid="BaseColumnList"/>
+        FROM
+            user_login t
+            LEFT JOIN sys_user AS su ON t.user_id = su.id
+        WHERE
+            t.user_id = #{userId}
+        ORDER BY
+            t.login_time DESC LIMIT 1
     </select>
 
 </mapper>

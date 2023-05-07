@@ -7,6 +7,7 @@ import com.code.entity.system.SysUser;
 import com.code.mapper.system.LoginMapper;
 import com.code.service.system.ILoginService;
 import com.code.service.system.IUserService;
+import com.code.utils.JwtToken;
 import com.code.utils.RedisUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class LoginService implements ILoginService {
@@ -42,6 +44,23 @@ public class LoginService implements ILoginService {
     @Override
     public SysUser mobileLogin(String mobile) {
         return iUserService.selectByMobile(mobile);
+    }
+
+    @Override
+    public LoginLog selectLatest(Long userId) {
+        return loginMapper.selectLatest(userId);
+    }
+
+    @Override
+    public int loginOut(String token) {
+        Map<String, Object> map = JwtToken.checkToken(token);
+        Integer userId = (Integer) map.get("userId");
+        Object getToken = redisUtil.get("USER_" + userId);
+        HashMap<String, String> tokenMap = JSON.parseObject(JSON.toJSONString(getToken), HashMap.class);
+        redisUtil.delete("TOKEN_ACCESS_" + tokenMap.get("access_token"));
+        redisUtil.delete("TOKEN_REFRESH_" + tokenMap.get("refresh_token"));
+        redisUtil.delete("USER_" + userId);
+        return 1;
     }
 
     /**

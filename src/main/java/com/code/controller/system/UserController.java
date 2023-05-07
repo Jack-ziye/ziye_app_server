@@ -7,6 +7,7 @@ import com.code.utils.Md5Utils;
 import com.code.utils.ResultCode;
 import com.code.utils.UserThreadLocal;
 import com.code.vo.ResetPwdParam;
+import com.code.vo.UpdatePwdParam;
 import com.github.pagehelper.PageInfo;
 
 import com.code.common.logAop.LogAnnotation;
@@ -180,11 +181,44 @@ public class UserController {
     @LogAnnotation(module = "用户管理接口", operator = "重置密码")
     public Result resetUserPassword(@RequestBody ResetPwdParam pwdParam) {
 
-        if(!pwdParam.getPassword().equals(pwdParam.getValidPassword())){
-            return Result.error(ResultCode.UPDATE_ERROR);
+        if (!pwdParam.getPassword().equals(pwdParam.getValidPassword())) {
+            return Result.error(ResultCode.PASSWORD_NO_EQUAL);
         }
         pwdParam.setPassword(Md5Utils.encrypt(pwdParam.getPassword()));
         SysUser user = JSON.parseObject(JSON.toJSONString(pwdParam), SysUser.class);
+        int status = iUserService.updateUser(user);
+        if (status == 0) {
+            return Result.error(ResultCode.UPDATE_ERROR);
+        }
+        return Result.ok("更新成功");
+    }
+
+    /**
+     * 修改密码
+     *
+     * @param param updatePwdParam
+     * @return Result
+     */
+    @ApiOperation(value = "修改密码")
+    @PostMapping("/update/password")
+    @RequiresPermissions(value = {"system:user:update"})
+    @LogAnnotation(module = "用户管理接口", operator = "修改密码")
+    public Result updateUserPassword(@RequestBody UpdatePwdParam param) {
+
+        // 确认密码比较
+        if (!param.getPassword().equals(param.getValidPassword())) {
+            return Result.error(ResultCode.PASSWORD_INPUT_NO_EQUAL);
+        }
+
+        String password = UserThreadLocal.get().getPassword();
+        // 输入旧密码加密比较
+        param.setOldPassword(Md5Utils.encrypt(param.getOldPassword()));
+        if (!password.equals(param.getOldPassword())) {
+            return Result.error(ResultCode.PASSWORD_NO_EQUAL);
+        }
+
+        param.setPassword(Md5Utils.encrypt(param.getPassword()));
+        SysUser user = JSON.parseObject(JSON.toJSONString(param), SysUser.class);
         int status = iUserService.updateUser(user);
         if (status == 0) {
             return Result.error(ResultCode.UPDATE_ERROR);

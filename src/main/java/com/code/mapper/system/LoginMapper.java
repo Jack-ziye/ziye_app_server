@@ -18,5 +18,6 @@ public interface LoginMapper extends Mapper<LoginLog> {
 
     List<LoginLog> selectPage(HashMap<String, Object> map);
 
+    LoginLog selectLatest(Long userId);
 }
 

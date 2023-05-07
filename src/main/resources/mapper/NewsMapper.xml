@@ -19,6 +19,7 @@
     <!-- 通用查询结果列 -->
     <sql id="BaseColumnList">
         t.id as newsId,
+        t.cover as cover,
         t.title as title,
         t.subtitle as subtitle,
         t.content as content,

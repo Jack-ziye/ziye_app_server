@@ -25,9 +25,6 @@ public class ThreadService {
     @Resource
     private INewsService iNewsService;
 
-    @Resource
-    private RedisUtil redisUtil;
-
     /**
      * 添加登录日志
      *
@@ -36,10 +33,7 @@ public class ThreadService {
     @Async("TaskExecutor")
     public void addLoginLog(LoginLog loginLog) {
         log.info("==================== 添加登录日志 start ====================");
-
         iLoginService.addLoginLog(loginLog);
-        redisUtil.set("ONLINE_USER_" + loginLog.getUserId(), loginLog, 30, TimeUnit.MINUTES);
-
         log.info("==================== 添加登录日志 end ====================");
     }
 

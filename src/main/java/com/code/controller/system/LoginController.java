@@ -167,14 +167,7 @@ public class LoginController {
     @GetMapping("/logout")
     @LogAnnotation(module = "登录管理接口", operator = "退出登录")
     public Result logout(@RequestHeader("Authorization") String token) {
-        Map<String, Object> map = JwtToken.checkToken(token);
-        Integer userId = (Integer) map.get("userId");
-        Object getToken = redisUtil.get("USER_" + userId);
-        HashMap<String, String> tokenMap = JSON.parseObject(JSON.toJSONString(getToken), HashMap.class);
-        redisUtil.delete("TOKEN_ACCESS_" + tokenMap.get("access_token"));
-        redisUtil.delete("TOKEN_REFRESH_" + tokenMap.get("refresh_token"));
-        redisUtil.delete("USER_" + userId);
-        redisUtil.delete("ONLINE_USER_" + userId);
+        iLoginService.loginOut(token);
         return Result.ok();
     }
 

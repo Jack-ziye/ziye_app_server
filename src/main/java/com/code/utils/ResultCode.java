@@ -13,7 +13,8 @@ public enum ResultCode {
     MOBILE_NO_BINDING(2004, "手机号未绑定"),
     PASSWORD_ERROR(2005, "密码错误"),
     PASSWORD_NO_EQUAL(2006, "密码不一致"),
-    USER_DISABLE(2007, "您的账号已停用，请联系管理员进行恢复"),
+    PASSWORD_INPUT_NO_EQUAL(2007, "确认密码不一致"),
+    USER_DISABLE(2008, "您的账号已停用，请联系管理员进行恢复"),
 
 
     VAR_CODE_NO_EQUAL(2010, "验证码错误，请输入正确验证码"),
@@ -24,6 +25,7 @@ public enum ResultCode {
     DELETE_ERROR(2022, "删除失败"),
     ASSIGN_ERROR(2023,"分配失败"),
     CANCEL_ERROR(2024,"取消失败"),
+
 
     UPLOAD_ERROR(2040,"上传失败"),
     UPLOAD_IS_NULL(2041,"上传失败, 请选择文件"),

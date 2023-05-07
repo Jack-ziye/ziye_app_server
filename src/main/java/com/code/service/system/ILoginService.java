@@ -22,4 +22,8 @@ public interface ILoginService {
     int deleteBatch(List<Long> ids);
 
     SysUser mobileLogin(String mobile);
+
+    LoginLog selectLatest(Long userId);
+
+    int loginOut(String token);
 }
