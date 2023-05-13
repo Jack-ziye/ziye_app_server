@@ -1,7 +1,9 @@
 package com.code.controller.system;
 
+import com.alibaba.excel.EasyExcel;
 import com.alibaba.fastjson2.JSON;
 import com.code.common.logAop.LogAnnotation;
+import com.code.entity.system.SysUser;
 import com.code.utils.Result;
 import com.code.utils.ResultCode;
 import com.code.vo.RoleParam;
@@ -12,14 +14,15 @@ import org.springframework.web.bind.annotation.*;
 import com.code.entity.system.Role;
 import com.code.service.system.IRoleService;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.File;
+import java.net.URLEncoder;
+import java.util.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.github.pagehelper.PageInfo;
@@ -184,6 +187,48 @@ public class RoleController {
         } else {
             return Result.error(ResultCode.DELETE_ERROR);
         }
+    }
+
+
+    /**
+     * 导出数据
+     *
+     * @param map props
+     */
+    @ApiOperation(value = "导出数据")
+    @PostMapping("/export")
+    @RequiresPermissions(value = {"system:role:export"})
+    public Result exportExcel(@RequestBody Map<String, Object> map) throws Exception {
+        HashMap<String, Object> params = new HashMap<>();
+
+        if (map.containsKey("roleId")) {
+            params.put("roleId", map.get("roleId"));
+        }
+
+        Set<String> propsName = new HashSet<>();
+
+        if (map.containsKey("props")) {
+            propsName.addAll((ArrayList<String>) map.get("props"));
+        }
+
+        // 构建文件
+        String filePath = "/save/" + UUID.randomUUID().toString().replace("-", "") + ".xlsx";
+        String fileDir = System.getProperty("user.dir") + "/static";
+        // 构建上传路径
+        File saveFile = new File(fileDir + filePath);
+        // 检测是否存在目录
+        if (!saveFile.getParentFile().exists()) {
+            saveFile.getParentFile().mkdirs();
+        }
+
+        List<Role> resultList = iRoleService.selectExcelList(params);
+        EasyExcel.write(saveFile, Role.class)
+                .includeColumnFieldNames(propsName)
+                .sheet("角色信息")
+                .doWrite(resultList);
+
+        return Result.ok().put(filePath);
+
     }
 
 }

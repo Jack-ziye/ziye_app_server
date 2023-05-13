@@ -72,5 +72,8 @@ public interface IDictService {
      * @return 0/1
      */
     int updateStatus(Long dictId);
+
+    List<Dict> selectExcelList(HashMap<String, Object> params);
+
 }
 

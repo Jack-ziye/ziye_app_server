@@ -6,6 +6,7 @@ import com.code.utils.ResultCode;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.util.FileSystemUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -46,7 +47,7 @@ public class FileController {
         // 获取文件的后缀名
         String suffixName = fileName.substring(fileName.lastIndexOf("."));
 
-        fileName = UUID.randomUUID().toString().replace("-","") + suffixName;
+        fileName = UUID.randomUUID().toString().replace("-", "") + suffixName;
         String filePath = savePath + "/" + fileName;
         String fileDir = System.getProperty("user.dir") + "/static";
 
@@ -65,7 +66,24 @@ public class FileController {
             e.printStackTrace();
             return Result.error(ResultCode.UPLOAD_ERROR);
         }
+    }
 
+    /**
+     * 删除导出文件
+     *
+     * @return Result
+     */
+    @ApiOperation(value = "删除导出文件")
+    @GetMapping("/remove")
+    @LogAnnotation(module = "文件管理接口", operator = "删除导出文件")
+    public void remove(@RequestParam(value = "url") String url) {
+        String fileDir = System.getProperty("user.dir") + "/static";
+        // 构建上传路径
+        File file = new File(fileDir + url);
+        // 检测是否存在目录
+        if (file.getParentFile().exists()) {
+            FileSystemUtils.deleteRecursively(file);
+        }
 
     }
 

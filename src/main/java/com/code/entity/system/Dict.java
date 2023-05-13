@@ -1,7 +1,6 @@
 package com.code.entity.system;
 
 import java.io.Serializable;
-import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
@@ -11,7 +10,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotBlank;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.alibaba.excel.annotation.ExcelProperty;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -26,25 +25,30 @@ public class Dict implements Serializable {
     @Id
     @Column(name = "`id`")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @ExcelProperty("ID")
     private Long dictId;
 
     @ApiModelProperty(value = "字典名称")
     @Column(name = "`name`")
+    @ExcelProperty("字典名称")
     @NotBlank(message = "请填写字典名称")
     private String dictName;
 
     @ApiModelProperty(value = "字典类型")
     @Column(name = "type")
+    @ExcelProperty("字典类型")
     @NotBlank(message = "请填写字典类型")
     private String dictType;
 
     @ApiModelProperty(value = "字典键名")
     @Column(name = "`key`")
+    @ExcelProperty("字典键名")
     @NotBlank(message = "请填写字典键名")
     private String dictKey;
 
     @ApiModelProperty(value = "字典键值")
     @Column(name = "`value`")
+    @ExcelProperty("字典键值")
     @NotBlank(message = "请填写字典键值")
     private String dictValue;
 
@@ -58,10 +62,12 @@ public class Dict implements Serializable {
 
     @ApiModelProperty(value = "排序字段")
     @Column(name = "order_index")
+    @ExcelProperty("排序字段")
     private Integer orderIndex;
 
     @ApiModelProperty(value = "状态名称")
     @Transient
+    @ExcelProperty("状态名称")
     private String statusName;
 
 }

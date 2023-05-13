@@ -103,5 +103,10 @@ public class DictService  implements IDictService {
         return dictMapper.updateStatus(dictId);
     }
 
+    @Override
+    public List<Dict> selectExcelList(HashMap<String, Object> params) {
+        return dictMapper.selectPage(params);
+    }
+
 }
 

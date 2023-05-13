@@ -4,6 +4,8 @@ import com.code.entity.system.Role;
 //import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
+
+import com.code.entity.system.SysUser;
 import com.github.pagehelper.PageInfo;
 import java.util.HashMap;
 
@@ -66,5 +68,6 @@ public interface IRoleService  {
     int updateStatus(Long roleId);
 
 
+    List<Role> selectExcelList(HashMap<String, Object> params);
 }
 

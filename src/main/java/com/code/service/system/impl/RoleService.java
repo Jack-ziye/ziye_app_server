@@ -182,5 +182,10 @@ public class RoleService implements IRoleService {
         return roleMapper.updateStatus(roleId);
     }
 
+    @Override
+    public List<Role> selectExcelList(HashMap<String, Object> params) {
+        return roleMapper.selectPage(params);
+    }
+
 }
 

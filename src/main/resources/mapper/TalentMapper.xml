@@ -46,10 +46,12 @@
     <select id="selectPageList" resultType="com.code.entity.pf.Talent">
         SELECT
             sd.`value` as statusName,
+            sd2.`value` as genderName,
             <include refid="BaseColumnList"/>
         FROM
             `pf_talent` as t
             LEFT JOIN sys_dict sd ON sd.`key` = t.status AND sd.type = 'system_status' AND sd.`status` = 0
+            LEFT JOIN sys_dict sd2 ON sd2.`key` = t.gender AND sd2.type = 'system_gender' AND sd2.`status` = 0
             <include refid="BaseWhere"/>
         ORDER BY
             t.create_time DESC

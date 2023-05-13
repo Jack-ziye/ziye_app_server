@@ -26,4 +26,6 @@ public interface ILoginService {
     LoginLog selectLatest(Long userId);
 
     int loginOut(String token);
+
+    List<LoginLog> selectExcelList(HashMap<String, Object> params);
 }

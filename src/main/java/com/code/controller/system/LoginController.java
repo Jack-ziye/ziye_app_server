@@ -1,7 +1,7 @@
 package com.code.controller.system;
 
+import com.alibaba.excel.EasyExcel;
 import com.alibaba.fastjson2.JSON;
-import com.alibaba.fastjson2.JSONObject;
 import com.code.common.logAop.LogAnnotation;
 import com.code.entity.system.CurrentMenu;
 import com.code.entity.system.LoginLog;
@@ -24,6 +24,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.net.URLEncoder;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -51,7 +53,7 @@ public class LoginController {
      * @param user 用户信息
      * @return 日志信息
      */
-    private LoginLog setLoginLog(SysUser user) {
+    private LoginLog setLoginLog(SysUser user, Integer status) {
         HttpServletRequest httpServletRequest = HttpContextUtils.getHttpServletRequest();
         UserAgent userAgent = UserAgent.parseUserAgentString(httpServletRequest.getHeader("user-agent"));
 
@@ -60,7 +62,7 @@ public class LoginController {
         login.setAddress(IpUtils.getIpAddress(httpServletRequest));
         login.setBrowser(userAgent.getBrowser().toString());
         login.setSystem(userAgent.getOperatingSystem().getName());
-        login.setStatus(0);
+        login.setStatus(status);
         login.setLoginTime(new Date());
         login.setUsername(user.getUsername());
 
@@ -100,9 +102,13 @@ public class LoginController {
         loginParam.setPassword(Md5Utils.encrypt(loginParam.getPassword()));
 
         SysUser user = iLoginService.login(loginParam.getUsername());
+
+
         if (user == null) {
             return Result.error(ResultCode.USER_IS_EXIST);
         } else if (!user.getPassword().equals(loginParam.getPassword())) {
+            LoginLog loginLog = setLoginLog(user, 1);
+            threadService.addLoginLog(loginLog);
             return Result.error(ResultCode.PASSWORD_ERROR);
         } else if (user.getStatus() != 0) {
             return Result.error(ResultCode.USER_DISABLE);
@@ -110,10 +116,8 @@ public class LoginController {
 
         // 用户登录设置
         HashMap<String, String> token = setToken(user);
-
+        LoginLog loginLog = setLoginLog(user, 0);
         // 添加登录日志
-        LoginLog loginLog = setLoginLog(user);
-        loginLog.setToken(token.get("access_token"));
         threadService.addLoginLog(loginLog);
 
         return Result.ok().put(token);
@@ -140,6 +144,8 @@ public class LoginController {
         if (varCode == null) {
             return Result.error(ResultCode.VAR_CODE_IS_EXIST);
         } else if (!varCode.equals(param.getCode())) {
+            LoginLog loginLog = setLoginLog(user, 2);
+            threadService.addLoginLog(loginLog);
             return Result.error(ResultCode.VAR_CODE_NO_EQUAL);
         } else if (user.getStatus() != 0) {
             return Result.error(ResultCode.USER_DISABLE);
@@ -150,8 +156,7 @@ public class LoginController {
         // 登录设置
         HashMap<String, String> token = setToken(user);
         // 添加登录日志
-        LoginLog loginLog = setLoginLog(user);
-        loginLog.setToken(token.get("access_token"));
+        LoginLog loginLog = setLoginLog(user, 0);
         threadService.addLoginLog(loginLog);
 
         return Result.ok().put(token);
@@ -192,13 +197,15 @@ public class LoginController {
 
         // 更新token >>> 创建新的token并返回
         HashMap<String, String> token = setToken(user);
-        LoginLog loginLog = setLoginLog(user);
-        loginLog.setToken(token.get("access_token"));
-        loginLog.setStatus(1);
+        LoginLog loginLog = setLoginLog(user, 0);
         threadService.addLoginLog(loginLog);
 
         return Result.ok().put(token);
     }
+
+
+    // -------------------------------------------------------------------------------------------------------------------
+
 
     /**
      * 获取当前用户信息
@@ -230,6 +237,10 @@ public class LoginController {
         ArrayList<CurrentMenu> menus = iMenuService.selectCurrentMenu(userId);
         return Result.ok().put(menus);
     }
+
+
+    // -------------------------------------------------------------------------------------------------------------------
+
 
     /**
      * 查询列表-登录日志
@@ -309,5 +320,45 @@ public class LoginController {
         return Result.ok("删除成功");
     }
 
+
+    /**
+     * 导出数据
+     *
+     * @param map props
+     */
+    @ApiOperation(value = "导出数据")
+    @PostMapping("/loginLog/export")
+    @RequiresPermissions(value = {"system:loginLog:export"})
+    public Result exportExcel(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String, Object> map) throws Exception {
+        HashMap<String, Object> params = new HashMap<>();
+
+        if (map.containsKey("userId")) {
+            params.put("userId", map.get("userId"));
+        }
+
+        Set<String> propsName = new HashSet<>();
+
+        if (map.containsKey("props")) {
+            propsName.addAll((ArrayList<String>) map.get("props"));
+        }
+
+        // 构建文件
+        String filePath = "/save/" + UUID.randomUUID().toString().replace("-", "") + ".xlsx";
+        String fileDir = System.getProperty("user.dir") + "/static";
+        // 构建上传路径
+        File saveFile = new File(fileDir + filePath);
+        // 检测是否存在目录
+        if (!saveFile.getParentFile().exists()) {
+            saveFile.getParentFile().mkdirs();
+        }
+
+        List<LoginLog> resultList = iLoginService.selectExcelList(params);
+        EasyExcel.write(saveFile, LoginLog.class)
+                .includeColumnFieldNames(propsName)
+                .sheet("角色信息")
+                .doWrite(resultList);
+
+        return Result.ok().put(filePath);
+    }
 
 }

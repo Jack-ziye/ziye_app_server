@@ -21,10 +21,12 @@ public class Talent {
     @Id
     @Column(name = "`id`")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @ExcelProperty("ID")
     private Long talentId;
 
     @ApiModelProperty(value = "人才名称")
     @Column(name = "`talent_name`")
+    @ExcelProperty("人才名称")
     private String talentName;
 
     @ApiModelProperty(value = "密码")
@@ -34,18 +36,17 @@ public class Talent {
 
     @ApiModelProperty(value = "性别")
     @Column(name = "gender")
-    @ExcelProperty("性别")
     private Integer gender;
 
     @ApiModelProperty(value = "出生日期")
     @Column(name = "birth_time")
-    @ExcelProperty("出生日期")
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+    @ExcelProperty("出生日期")
     private Date birthTime;
 
     @ApiModelProperty(value = "微信号")
     @Column(name = "wechat")
-    @ExcelProperty("手机号")
+    @ExcelProperty("微信号")
     private String wechat;
 
     @ApiModelProperty(value = "籍贯")
@@ -75,6 +76,7 @@ public class Talent {
     @ApiModelProperty(value = "创建时间")
     @Column(name = "create_time")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @ExcelProperty("注册时间")
     private Date createTime;
 
     @ApiModelProperty(value = "最后更新时间")
@@ -83,7 +85,7 @@ public class Talent {
     private Date lmt;
 
     @ApiModelProperty(value = "性别名称")
-    @ExcelProperty("性别名称")
+    @ExcelProperty("性别")
     @Transient
     private String genderName;
 

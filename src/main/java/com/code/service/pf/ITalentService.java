@@ -48,5 +48,5 @@ public interface ITalentService {
     int deleteBatch(List<Long> ids);
 
 
-
+    List<Talent> selectExcelList(HashMap<String, Object> params);
 }

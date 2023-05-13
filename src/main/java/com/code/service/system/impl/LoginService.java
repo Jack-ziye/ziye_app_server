@@ -63,6 +63,8 @@ public class LoginService implements ILoginService {
         return 1;
     }
 
+
+
     /**
      * 获取当前用户信息
      *
@@ -129,6 +131,11 @@ public class LoginService implements ILoginService {
             loginMapper.deleteByPrimaryKey(id);
         }
         return 1;
+    }
+
+    @Override
+    public List<LoginLog> selectExcelList(HashMap<String, Object> params) {
+        return loginMapper.selectPage(params);
     }
 
 }

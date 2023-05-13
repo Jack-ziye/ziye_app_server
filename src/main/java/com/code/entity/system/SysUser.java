@@ -31,7 +31,6 @@ public class SysUser {
 
     @ApiModelProperty(value = "用户名称")
     @Column(name = "username")
-    @ExcelProperty("用户名称")
     private String username;
 
     @ApiModelProperty(value = "密码")
@@ -78,7 +77,6 @@ public class SysUser {
     private Long modifier;
 
     @ApiModelProperty(value = "角色ID")
-    @ExcelProperty("角色ID")
     @Transient
     private Long roleId;
 

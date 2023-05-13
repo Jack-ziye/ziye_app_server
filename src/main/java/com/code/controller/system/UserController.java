@@ -2,6 +2,7 @@ package com.code.controller.system;
 
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.fastjson2.JSON;
+import com.code.entity.system.Role;
 import com.code.service.system.IUserService;
 import com.code.utils.Md5Utils;
 import com.code.utils.ResultCode;
@@ -30,6 +31,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.net.URLEncoder;
 import java.util.*;
 
@@ -272,7 +274,7 @@ public class UserController {
     @ApiOperation(value = "导出数据")
     @PostMapping("/export")
     @RequiresPermissions(value = {"system:user:export"})
-    public void exportExcel(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String, Object> map) throws Exception {
+    public Result exportExcel(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String, Object> map) throws Exception {
         HashMap<String, Object> params = new HashMap<>();
 
         if (map.containsKey("userId")) {
@@ -285,14 +287,23 @@ public class UserController {
             propsName.addAll((ArrayList<String>) map.get("props"));
         }
 
+        // 构建文件
+        String filePath = "/save/" + UUID.randomUUID().toString().replace("-", "") + ".xlsx";
+        String fileDir = System.getProperty("user.dir") + "/static";
+        // 构建上传路径
+        File saveFile = new File(fileDir + filePath);
+        // 检测是否存在目录
+        if (!saveFile.getParentFile().exists()) {
+            saveFile.getParentFile().mkdirs();
+        }
+
         List<SysUser> resultList = iUserService.selectExcelList(params);
+        EasyExcel.write(saveFile, SysUser.class)
+                .includeColumnFieldNames(propsName)
+                .sheet("用户信息")
+                .doWrite(resultList);
 
-        String fileName = URLEncoder.encode("用户信息", "UTF-8").replaceAll("\\+", "%20");
-        response.setHeader("Content-disposition", "attachment;filename*=utf-8''" + fileName + ".xlsx");
-        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-        response.setCharacterEncoding("utf-8");
-        EasyExcel.write(response.getOutputStream(), SysUser.class).includeColumnFieldNames(propsName).sheet("用户信息").doWrite(resultList);
-
+        return Result.ok().put(filePath);
     }
 
 }

@@ -45,8 +45,11 @@
     <!-- 分页查询 -->
     <select id="selectPage" resultType="com.code.entity.system.Dict">
         SELECT
+            sd.`value` as statusName,
             <include refid="BaseColumnList"/>
-        FROM sys_dict t
+        FROM
+            sys_dict t
+            LEFT JOIN sys_dict sd ON sd.`key` = t.status AND sd.type = 'system_status' AND sd.`status` = 0
             <include refid="BaseWhere"/>
         <choose>
             <when test="sort != null and sort.trim() != ''">

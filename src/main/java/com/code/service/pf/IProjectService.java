@@ -30,5 +30,6 @@ public interface IProjectService {
 
     int deleteBatch(List<Long> ids);
 
-    
+
+    List<Project> selectExcelList(HashMap<String, Object> params);
 }

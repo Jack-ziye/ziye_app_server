@@ -1,5 +1,6 @@
 package com.code.controller.pf;
 
+import com.alibaba.excel.EasyExcel;
 import com.code.common.logAop.LogAnnotation;
 import com.code.entity.pf.Talent;
 import com.code.entity.system.SysUser;
@@ -11,14 +12,16 @@ import com.code.utils.UserThreadLocal;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
-import java.util.Map;
+import java.io.File;
+import java.util.*;
 
 /**
  * <p>
@@ -176,6 +179,46 @@ public class TalentController {
         } else {
             return Result.error(ResultCode.DELETE_ERROR);
         }
+    }
+
+    /**
+     * 导出数据
+     *
+     * @param map props
+     */
+    @ApiOperation(value = "导出数据")
+    @PostMapping("/export")
+    @RequiresPermissions(value = {"system:talent:export"})
+    public Result exportExcel(HttpServletRequest request, HttpServletResponse response, @RequestBody Map<String, Object> map) throws Exception {
+        HashMap<String, Object> params = new HashMap<>();
+
+        if (map.containsKey("talentId")) {
+            params.put("talentId", map.get("talentId"));
+        }
+
+        Set<String> propsName = new HashSet<>();
+
+        if (map.containsKey("props")) {
+            propsName.addAll((ArrayList<String>) map.get("props"));
+        }
+
+        // 构建文件
+        String filePath = "/save/" + UUID.randomUUID().toString().replace("-", "") + ".xlsx";
+        String fileDir = System.getProperty("user.dir") + "/static";
+        // 构建上传路径
+        File saveFile = new File(fileDir + filePath);
+        // 检测是否存在目录
+        if (!saveFile.getParentFile().exists()) {
+            saveFile.getParentFile().mkdirs();
+        }
+
+        List<Talent> resultList = iTalentService.selectExcelList(params);
+        EasyExcel.write(saveFile, Talent.class)
+                .includeColumnFieldNames(propsName)
+                .sheet("用户信息")
+                .doWrite(resultList);
+
+        return Result.ok().put(filePath);
     }
 
 }

@@ -152,6 +152,11 @@ public class TalentService implements ITalentService {
         return 1;
     }
 
+    @Override
+    public List<Talent> selectExcelList(HashMap<String, Object> params) {
+        return talentMapper.selectPageList(params);
+    }
+
 
 }
 

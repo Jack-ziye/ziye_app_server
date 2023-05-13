@@ -146,6 +146,10 @@ public class ProjectService implements IProjectService {
         return 1;
     }
 
+    @Override
+    public List<Project> selectExcelList(HashMap<String, Object> params) {
+        return projectMapper.selectPageList(params);
+    }
 
 
 }

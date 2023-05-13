@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.persistence.*;
 
+import com.alibaba.excel.annotation.ExcelProperty;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -21,14 +22,17 @@ public class Role implements Serializable {
     @Id
     @Column(name = "`id`")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @ExcelProperty("ID")
     private Long roleId;
 
     @ApiModelProperty(value = "角色名称")
     @Column(name = "name")
+    @ExcelProperty("角色名称")
     private String roleName;
 
     @ApiModelProperty(value = "权限标识")
     @Column(name = "code")
+    @ExcelProperty("权限标识")
     private String roleCode;
 
     @ApiModelProperty(value = "显示顺序")
@@ -49,6 +53,7 @@ public class Role implements Serializable {
     @ApiModelProperty(value = "创建时间")
     @Column(name = "create_time")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @ExcelProperty("创建时间")
     private Date createTime;
 
     @ApiModelProperty(value = "角色创建人")
@@ -62,6 +67,7 @@ public class Role implements Serializable {
 
     @ApiModelProperty(value = "状态名称")
     @Transient
+    @ExcelProperty("状态")
     private String statusName;
 
 }

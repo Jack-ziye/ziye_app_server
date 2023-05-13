@@ -154,6 +154,11 @@ public class ApplyService implements IApplyService {
         return 1;
     }
 
+    @Override
+    public List<Apply> selectExcelList(HashMap<String, Object> params) {
+        return applyMapper.selectPageList(params);
+    }
+
 
 }
 

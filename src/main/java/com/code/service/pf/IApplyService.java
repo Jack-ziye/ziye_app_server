@@ -39,4 +39,5 @@ public interface IApplyService {
     int deleteBatch(List<Long> ids);
 
 
+    List<Apply> selectExcelList(HashMap<String, Object> params);
 }

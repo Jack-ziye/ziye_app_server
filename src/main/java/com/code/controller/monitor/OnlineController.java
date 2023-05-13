@@ -1,6 +1,7 @@
 package com.code.controller.monitor;
 
 import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.TypeReference;
 import com.code.entity.monitor.OnlineUser;
 import com.code.entity.system.LoginLog;
 import com.code.entity.system.SysUser;
@@ -8,6 +9,7 @@ import com.code.service.system.ILoginService;
 import com.code.utils.*;
 import eu.bitwalker.useragentutils.UserAgent;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import org.apache.catalina.User;
 import org.apache.commons.lang3.StringUtils;
@@ -39,10 +41,21 @@ public class OnlineController {
     @ApiOperation(value = "获取在线用户列表")
     @PostMapping("/select")
     public Result getOnlineUser(@RequestBody Map<String, String> map) {
-        List<String> keys = redisUtil.scan("ONLINE_USER_*");
+        List<String> keys = redisUtil.scan("USER_*");
         ArrayList<OnlineUser> onlineUsers = new ArrayList<>();
         for (String key : keys) {
-            OnlineUser onlineUser = JSON.parseObject(JSON.toJSONString(redisUtil.get(key)), OnlineUser.class);
+            Long userId = Long.valueOf(key.split("_")[1]);
+
+            LoginLog loginLog = iLoginService.selectLatest(userId);
+            OnlineUser onlineUser = JSON.parseObject(JSON.toJSONString(loginLog), OnlineUser.class);
+
+            HashMap<String, String> token = JSON.parseObject(JSON.toJSONString(redisUtil.get("USER_" + userId)), HashMap.class);
+            onlineUser.setToken(token.get("access_token"));
+
+            Object status = redisUtil.get("ONLINE_USER_" + userId);
+            onlineUser.setStatusName(status == null ? "离开" : "在线");
+
+
             onlineUsers.add(onlineUser);
         }
 
@@ -58,9 +71,9 @@ public class OnlineController {
     @GetMapping("/update")
     public Result updateOnlineUser() {
         SysUser sysUser = UserThreadLocal.get();
-        LoginLog loginLog = iLoginService.selectLatest(sysUser.getUserId());
-        OnlineUser onlineUser = JSON.parseObject(JSON.toJSONString(loginLog), OnlineUser.class);
-        redisUtil.set("ONLINE_USER_" + sysUser.getUserId(), onlineUser, 10, TimeUnit.SECONDS);
+//        LoginLog loginLog = iLoginService.selectLatest(sysUser.getUserId());
+//        OnlineUser onlineUser = JSON.parseObject(JSON.toJSONString(loginLog), OnlineUser.class);
+        redisUtil.set("ONLINE_USER_" + sysUser.getUserId(), sysUser.getUserId(), 5, TimeUnit.SECONDS);
         return Result.ok();
     }
 

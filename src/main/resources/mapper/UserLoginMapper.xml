@@ -19,7 +19,6 @@
     <sql id="BaseColumnList">
         t.id as id,
         t.user_id as userId,
-        t.token as token,
         t.address as address,
         t.place as place,
         t.browser as browser,
@@ -48,10 +47,12 @@
     <select id="selectPage" resultType="com.code.entity.system.LoginLog">
         SELECT
             su.username as username,
+            sd.`value` as statusName,
             <include refid="BaseColumnList"/>
         FROM
             user_login t
             LEFT JOIN sys_user AS su ON t.user_id = su.id
+            LEFT JOIN sys_dict sd ON sd.`key` = t.status AND sd.type = 'system_login_status' AND sd.`status` = 0
             <include refid="BaseWhere"/>
         <choose>
             <when test="sort != null and sort.trim() != ''">
@@ -63,7 +64,7 @@
         </choose>
     </select>
 
-    <!-- 分页查询 -->
+    <!-- 查询用户登录成功日志 -->
     <select id="selectLatest" resultType="com.code.entity.system.LoginLog">
         SELECT
             su.username as username,
@@ -73,6 +74,7 @@
             LEFT JOIN sys_user AS su ON t.user_id = su.id
         WHERE
             t.user_id = #{userId}
+            AND t.`status` = 0
         ORDER BY
             t.login_time DESC LIMIT 1
     </select>

@@ -23,6 +23,7 @@ public class Project {
     @Id
     @Column(name = "`id`")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @ExcelProperty("ID")
     private Long projectId;
 
     @ApiModelProperty(value = "类别ID")
@@ -35,6 +36,7 @@ public class Project {
 
     @ApiModelProperty(value = "项目名称")
     @Column(name = "`name`")
+    @ExcelProperty("项目名称")
     private String projectName;
 
     @ApiModelProperty(value = "项目内容")
@@ -52,11 +54,13 @@ public class Project {
     @ApiModelProperty(value = "开始时间")
     @Column(name = "start_time")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @ExcelProperty("开始时间")
     private Date startTime;
 
     @ApiModelProperty(value = "结束时间")
     @Column(name = "end_time")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @ExcelProperty("结束时间")
     private Date endTime;
 
     @ApiModelProperty(value = "项目状态")
@@ -74,6 +78,7 @@ public class Project {
     @ApiModelProperty(value = "创建时间")
     @Column(name = "create_time")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @ExcelProperty("创建时间")
     private Date createTime;
 
     @ApiModelProperty(value = "创建人")
@@ -89,22 +94,23 @@ public class Project {
     @Column(name = "modifier")
     private Long modifier;
 
-    /**
-     *
-     */
-
     @ApiModelProperty(value = "状态名称")
     @Transient
     private String statusName;
 
     @ApiModelProperty(value = "状态说明")
     @Transient
+    @ExcelProperty("状态")
     private String statusInfo;
 
     @ApiModelProperty(value = "类别名称")
     @ExcelProperty("类别名称")
     @Transient
     private String categoryName;
+
+    /**
+     *
+     */
 
     @ApiModelProperty(value = "剩余时间")
     @Transient

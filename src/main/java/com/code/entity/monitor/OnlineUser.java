@@ -29,6 +29,9 @@ public class OnlineUser {
     @ApiModelProperty(value = "操作系统")
     private String system;
 
+    @ApiModelProperty(value = "状态")
+    private String statusName;
+
     @ApiModelProperty(value = "登录时间")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date loginTime;
