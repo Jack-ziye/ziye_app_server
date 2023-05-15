@@ -2,6 +2,7 @@ package com.code.service.system.impl;
 
 
 import com.code.entity.system.Notice;
+import com.code.entity.system.NoticeUser;
 import com.code.mapper.system.NoticeMapper;
 import com.code.service.system.INoticeService;
 import com.code.utils.UserThreadLocal;
@@ -23,9 +24,7 @@ public class NoticeService implements INoticeService {
     private NoticeMapper noticeMapper;
 
     private void setUpdateInfo(Notice notice) {
-        Long userId = UserThreadLocal.get().getUserId();
         notice.setLmt(new Date());
-        notice.setModifier(userId);
     }
 
     /**
@@ -87,7 +86,6 @@ public class NoticeService implements INoticeService {
     }
 
 
-
     /**
      * 用户状态变更
      *
@@ -125,6 +123,19 @@ public class NoticeService implements INoticeService {
         return 1;
     }
 
+    @Override
+    public PageInfo<NoticeUser> selectPageListUser(HashMap<String, Object> map, int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        List<NoticeUser> noticeList = noticeMapper.selectPageUserList(map);
+        PageInfo<NoticeUser> pages = new PageInfo<>(noticeList);
+        return pages;
+    }
+
+    @Override
+    public List<NoticeUser> selectListUserByNoticeId(Long noticeId) {
+        List<NoticeUser> noticeList = noticeMapper.selectListUserByNoticeId(noticeId);
+        return noticeList;
+    }
 
 
 }

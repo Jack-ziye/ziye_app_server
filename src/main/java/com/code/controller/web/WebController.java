@@ -161,30 +161,7 @@ public class WebController {
         return Result.ok().put(project);
     }
 
-    /**
-     * 获取项目申请
-     *
-     * @return Result
-     */
-    @ApiOperation(value = "获取项目申请")
-    @PostMapping("/apply/add")
-    @LogAnnotation(module = "前台管理接口", operator = "获取项目申请")
-    public Result applyInsert(@RequestBody ProjectTalentParam param) {
-        Apply apply = new Apply();
-        apply.setProjectId(param.getProjectId());
-        apply.setTalentId(param.getTalentId());
 
-        Apply res = iApplyService.selectByProjectIdAndTalentId(param.getProjectId(), param.getTalentId());
-        if (res != null) {
-            Result.ok("您已提交过申请，可以在个人中心中查看");
-        }
-
-        int status = iApplyService.insertApply(apply);
-        if (status == 0) {
-            Result.error("提交失败");
-        }
-        return Result.ok();
-    }
 
     /**
      * 获取项目申请

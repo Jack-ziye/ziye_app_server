@@ -2,6 +2,7 @@ package com.code.mapper.system;
 
 
 import com.code.entity.system.Notice;
+import com.code.entity.system.NoticeUser;
 import tk.mybatis.mapper.common.Mapper;
 
 import java.util.HashMap;
@@ -14,5 +15,9 @@ public interface NoticeMapper extends Mapper<Notice> {
     Notice selectById(Long noticeId);
 
     int updateStatus(Long noticeId);
+
+    List<NoticeUser> selectPageUserList(HashMap<String, Object> map);
+
+    List<NoticeUser> selectListUserByNoticeId(Long noticeId);
 
 }

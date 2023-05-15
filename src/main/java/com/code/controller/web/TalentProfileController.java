@@ -13,6 +13,7 @@ import com.code.service.pf.ITalentService;
 import com.code.utils.Result;
 import com.code.utils.ResultCode;
 import com.code.utils.TalentThreadLocal;
+import com.code.utils.ThreadService;
 import com.code.vo.ProjectTalentParam;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
@@ -42,6 +43,9 @@ public class TalentProfileController {
 
     @Resource
     private ITalentService iTalentService;
+
+    @Resource
+    private ThreadService threadService;
 
 
     /**
@@ -94,6 +98,37 @@ public class TalentProfileController {
         }
         PageInfo<Apply> pages = iApplyService.selectPageList(params, pageNum, pageSize);
         return Result.ok().putPage(pages);
+    }
+
+
+    /**
+     * 提交报名申请
+     *
+     * @return Result
+     */
+    @ApiOperation(value = "提交报名申请")
+    @GetMapping("/apply/add")
+    @LogAnnotation(module = "前台管理接口", operator = "提交报名申请")
+    public Result applyInsert(@RequestParam(value = "id") Long projectId) {
+        // 查询申请判断是否已提交
+        Talent talent = TalentThreadLocal.get();
+        Apply res = iApplyService.selectByProjectIdAndTalentId(projectId, talent.getTalentId());
+        if (res != null) {
+            Result.ok("您已提交过申请，可以在个人中心中查看");
+        }
+
+        // 添加申请
+        Apply apply = new Apply();
+        apply.setProjectId(projectId);
+        apply.setTalentId(talent.getTalentId());
+        int status = iApplyService.insertApply(apply);
+        if (status == 0) {
+            Result.error("提交失败");
+        }
+
+        // 推送通知
+        threadService.pushInform(projectId, talent);
+        return Result.error("");
     }
 
 

@@ -33,6 +33,10 @@ public class Notice {
     @Column(name = "type")
     private Integer noticeType;
 
+    @ApiModelProperty(value = "类型名称")
+    @Transient
+    private String typeName;
+
     @ApiModelProperty(value = "状态")
     @Column(name = "`status`")
     private Integer status;

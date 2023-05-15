@@ -48,14 +48,17 @@
     <select id="selectPageList" resultType="com.code.entity.system.Notice">
         SELECT
             sd.`value` as statusName,
+            sd2.`value` as typeName,
             <include refid="BaseColumnList"/>
         FROM
             `sys_notice` as t
             LEFT JOIN sys_dict sd ON sd.`key` = t.status AND sd.type = 'system_status' AND sd.`status` = 0
+            LEFT JOIN sys_dict sd2 ON sd2.`key` = t.`type` AND sd2.type = 'notice_type' AND sd2.`status` = 0
             <include refid="BaseWhere"/>
         ORDER BY
             t.create_time DESC
     </select>
+
 
     <!-- 查看详情 -->
     <select id="selectById" resultType="com.code.entity.system.Notice">
@@ -76,5 +79,61 @@
         WHERE
             t.id = #{noticeId}
     </update>
+
+
+    <!-- 通用查询条件 -->
+    <sql id="BaseUserWhere">
+        <where>
+            <if test="username != null and username != ''">
+                and t.username like CONCAT('%',#{username},'%')
+            </if>
+            <if test="isPush != null and isPush != ''">
+                <if test="isPush == 'true'">
+                    si.id IS NOT NULL
+                </if>
+                <if test="isPush == 'false'">
+                    si.id IS NULL
+                </if>
+            </if>
+            <if test="creatTimeFrom != null and creatTimeFrom != '' and creatTimeTo != null and creatTimeTo != ''">
+                and t.create_time BETWEEN #{creatTimeFrom} AND #{creatTimeTo}
+            </if>
+        </where>
+    </sql>
+
+
+    <!-- 分页查询通知用户 -->
+    <select id="selectPageUserList" resultType="com.code.entity.system.NoticeUser">
+        SELECT
+            t.id as userId,
+            t.username as username,
+            t.mobile as mobile,
+            si.is_read as isRead,
+            si.id as informId
+        FROM
+            `sys_user` as t
+            LEFT JOIN sys_inform si ON si.user_id = t.id AND si.notice_id = #{noticeId}
+            <include refid="BaseUserWhere"/>
+        ORDER BY
+            t.id
+    </select>
+
+    <!-- 获取已推送的用户   -->
+    <select id="selectListUserByNoticeId" resultType="com.code.entity.system.NoticeUser">
+        SELECT
+            t.id as userId,
+            t.username as username,
+            t.mobile as mobile,
+            si.is_read as isRead,
+            si.id as informId
+        FROM
+            `sys_user` as t
+            LEFT JOIN sys_inform si ON si.user_id = t.id AND si.notice_id = #{noticeId}
+        WHERE
+            si.id IS NOT NULL
+        ORDER BY
+            t.id
+    </select>
+
 
 </mapper>

@@ -1,6 +1,7 @@
 package com.code.service.system;
 
 import com.code.entity.system.Notice;
+import com.code.entity.system.NoticeUser;
 import com.github.pagehelper.PageInfo;
 
 import java.util.HashMap;
@@ -28,5 +29,7 @@ public interface INoticeService {
 
     int deleteBatch(List<Long> ids);
 
-    
+    PageInfo<NoticeUser> selectPageListUser(HashMap<String, Object> params, int pageNum, int pageSize);
+
+    List<NoticeUser> selectListUserByNoticeId(Long noticeId);
 }

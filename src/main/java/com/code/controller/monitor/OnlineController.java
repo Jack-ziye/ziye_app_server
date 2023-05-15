@@ -71,8 +71,6 @@ public class OnlineController {
     @GetMapping("/update")
     public Result updateOnlineUser() {
         SysUser sysUser = UserThreadLocal.get();
-//        LoginLog loginLog = iLoginService.selectLatest(sysUser.getUserId());
-//        OnlineUser onlineUser = JSON.parseObject(JSON.toJSONString(loginLog), OnlineUser.class);
         redisUtil.set("ONLINE_USER_" + sysUser.getUserId(), sysUser.getUserId(), 5, TimeUnit.SECONDS);
         return Result.ok();
     }
@@ -86,9 +84,9 @@ public class OnlineController {
     @GetMapping("/delete")
     public Result deleteOnlineUser(@RequestParam(value = "token") String token) {
         Map<String, Object> map = JwtToken.checkToken(token);
+        iLoginService.loginOut(token);
         Integer userId = (Integer) map.get("userId");
         redisUtil.delete("ONLINE_USER_" + userId);
-        iLoginService.loginOut(token);
         return Result.ok();
     }
 
