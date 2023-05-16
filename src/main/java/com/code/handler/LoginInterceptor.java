@@ -73,8 +73,8 @@ public class LoginInterceptor implements HandlerInterceptor {
                 return false;
             }
 
-            // 用户不存在
             Talent talent = iTalentLoginService.selectTalentByToken(webAccessToken);
+            // 用户不存在
             if (talent == null) {
                 Result result = Result.error(ResultCode.TOKEN_ERROR);
                 response.getWriter().print(JSON.toJSONString(result));
@@ -92,6 +92,10 @@ public class LoginInterceptor implements HandlerInterceptor {
             TalentThreadLocal.put(talent);
             return true;
         }
+
+
+
+        // admin 端 token校验
 
         // token过期
         if (JwtToken.getTokenExpired(accessToken) == 0) {

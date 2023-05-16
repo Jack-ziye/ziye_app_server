@@ -1,23 +1,24 @@
 package com.code.controller.web;
 
 
+import com.alibaba.fastjson2.JSON;
 import com.code.common.logAop.LogAnnotation;
 import com.code.entity.pf.Apply;
 import com.code.entity.pf.Category;
 import com.code.entity.pf.Project;
 import com.code.entity.pf.Talent;
+import com.code.entity.system.SysUser;
 import com.code.service.pf.IApplyService;
 import com.code.service.pf.ICategoryService;
 import com.code.service.pf.IProjectService;
 import com.code.service.pf.ITalentService;
-import com.code.utils.Result;
-import com.code.utils.ResultCode;
-import com.code.utils.TalentThreadLocal;
-import com.code.utils.ThreadService;
+import com.code.utils.*;
 import com.code.vo.ProjectTalentParam;
+import com.code.vo.UpdatePwdParam;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -64,6 +65,38 @@ public class TalentProfileController {
         } else {
             return Result.error(ResultCode.UPDATE_ERROR);
         }
+    }
+
+    /**
+     * 修改密码
+     *
+     * @param param updatePwdParam
+     * @return Result
+     */
+    @ApiOperation(value = "修改密码")
+    @PostMapping("/update/password")
+    @LogAnnotation(module = "人才前台管理接口", operator = "修改密码")
+    public Result updateUserPassword(@RequestBody UpdatePwdParam param) {
+
+        // 确认密码比较
+        if (!param.getPassword().equals(param.getValidPassword())) {
+            return Result.error(ResultCode.PASSWORD_INPUT_NO_EQUAL);
+        }
+
+        String password = TalentThreadLocal.get().getPassword();
+        // 输入旧密码加密比较
+        param.setOldPassword(Md5Utils.encrypt(param.getOldPassword()));
+        if (!password.equals(param.getOldPassword())) {
+            return Result.error(ResultCode.PASSWORD_NO_EQUAL);
+        }
+
+        param.setPassword(Md5Utils.encrypt(param.getPassword()));
+        Talent talent = JSON.parseObject(JSON.toJSONString(param), Talent.class);
+        int status = iTalentService.updateTalent(talent);
+        if (status == 0) {
+            return Result.error(ResultCode.UPDATE_ERROR);
+        }
+        return Result.ok("修改成功");
     }
 
 

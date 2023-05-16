@@ -34,6 +34,10 @@ public class Talent {
     @JSONField(serialize = false)
     private String password;
 
+    @ApiModelProperty(value = "头像")
+    @Column(name = "avatar")
+    private String avatar;
+
     @ApiModelProperty(value = "性别")
     @Column(name = "gender")
     private Integer gender;

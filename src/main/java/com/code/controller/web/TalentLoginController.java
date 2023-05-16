@@ -52,8 +52,6 @@ public class TalentLoginController {
         HashMap<String, String> token = new HashMap<>();
         token.put("access_token", accessToken);
         token.put("refresh_token", refreshToken);
-
-        System.out.println("TALENT：" + talent.getTalentId());
         redisUtil.set("TALENT_" + talent.getTalentId(), token, JwtToken.getTokenExpired(accessToken), TimeUnit.MINUTES);
 
         return token;

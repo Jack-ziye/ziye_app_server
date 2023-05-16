@@ -18,6 +18,8 @@
     <sql id="BaseColumnList">
         t.id as talentId,
         t.talent_name as talentName,
+        t.password as password,
+        t.avatar as avatar,
         t.gender as gender,
         t.birth_time as birthTime,
         t.wechat as wechat,

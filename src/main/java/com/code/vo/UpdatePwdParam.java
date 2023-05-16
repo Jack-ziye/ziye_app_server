@@ -8,8 +8,11 @@ import javax.validation.constraints.NotBlank;
 @Data
 public class UpdatePwdParam {
 
-    @ApiModelProperty(value = "id")
+    @ApiModelProperty(value = "userId")
     private Long userId;
+
+    @ApiModelProperty(value = "talentId")
+    private Long talentId;
 
     @ApiModelProperty(value = "旧密码")
     @NotBlank(message = "请填写旧密码")
